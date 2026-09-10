@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Date Night Mumbai</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23E23B4E' d='M16 28s-11-7.2-14-14.2C0.3 8.4 3 3 8.5 3c3 0 5.3 1.7 7.5 4.6C18.2 4.7 20.5 3 23.5 3 29 3 31.7 8.4 30 13.8 27 21 16 28 16 28z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,440;0,9..144,560;1,9..144,440&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  :root{
+    --ink:#1B1625;
+    --dusk:#3A2A4D;
+    --amber:#E8A33D;
+    --paper:#F3ECE1;
+    --rose:#B84B5E;
+    --line: rgba(243,236,225,0.10);
+    --muted: rgba(243,236,225,0.55);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter', sans-serif; }
+  a{color:inherit; text-decoration:none;}
+  button{ font-family:inherit; }
+
+  /* ---------- NAV ---------- */
+  nav{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:6px 32px; border-bottom:1px solid var(--line);
+    position:sticky; top:0; background:rgba(27,22,37,0.95);
+    backdrop-filter:blur(6px); z-index:50; flex-wrap:wrap; gap:12px;
+  }
+  .logo-link{ display:flex; align-items:center; cursor:pointer; }
+  .logo-link img{ height:150px; display:block; }
+  .nav-right{ display:flex; align-items:center; gap:12px; }
+  .nav-link{
+    font-size:14.5px; font-weight:600; color:var(--paper); cursor:pointer;
+    padding:11px 20px; border-radius:100px; border:1px solid var(--line);
+  }
+  .nav-link.active{ background:var(--amber); color:var(--ink); border-color:var(--amber); }
+  .view-toggle{
+    display:flex; gap:6px; background:rgba(243,236,225,0.06);
+    border:1px solid var(--line); border-radius:100px; padding:3px;
+  }
+  .view-toggle button{
+    background:transparent; border:none; color:var(--paper);
+    font-size:12.5px; font-weight:600; padding:7px 16px; border-radius:100px; cursor:pointer;
+  }
+  .view-toggle button.active{ background:var(--amber); color:var(--ink); }
+
+  /* ---------- HOMEPAGE: CATEGORY TILES ---------- */
+  #homeView{
+    padding:56px 32px 70px; max-width:1200px; margin:0 auto;
+    background:
+      radial-gradient(ellipse 700px 380px at 85% -10%, rgba(232,163,61,0.10), transparent 60%),
+      radial-gradient(ellipse 600px 340px at 5% 5%, rgba(184,75,94,0.09), transparent 55%);
+  }
+  .home-kicker{
+    font-size:12.5px; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--amber); font-weight:700; margin-bottom:14px;
+  }
+  .home-title{
+    font-family:'Fraunces', serif; font-weight:440; font-style:italic;
+    font-size:clamp(28px,4vw,40px); margin-bottom:8px;
+  }
+  .home-sub{ color:var(--muted); font-size:14.5px; margin-bottom:36px; }
+  .cat-tiles{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+    gap:20px;
+  }
+  .cat-tile{
+    height:220px; border-radius:14px; position:relative; overflow:hidden;
+    cursor:pointer; background-size:cover; background-position:center;
+    background-color:var(--dusk); display:flex; align-items:flex-end;
+    border:1px solid var(--line); transition:transform .15s ease, box-shadow .15s ease;
+    box-shadow:0 4px 20px rgba(0,0,0,0.25);
+  }
+  .cat-tile:hover{ transform:translateY(-3px); box-shadow:0 10px 28px rgba(0,0,0,0.4); }
+  .cat-tile-overlay{
+    width:100%; padding:22px;
+    background:linear-gradient(0deg, rgba(0,0,0,0.85) 10%, rgba(0,0,0,0.25) 55%, transparent 100%);
+  }
+  .cat-tile-overlay h3{
+    font-family:'Fraunces', serif; font-weight:500; font-size:21px;
+    text-shadow:0 2px 8px rgba(0,0,0,0.6);
+  }
+  .cat-tile-overlay .count{
+    font-size:12.5px; color:rgba(243,236,225,0.85); margin-top:4px;
+    text-shadow:0 1px 4px rgba(0,0,0,0.6);
+  }
+  .see-all-row{ text-align:center; margin-top:32px; }
+  .see-all-link{
+    font-size:13px; color:var(--muted); border-bottom:1px solid var(--line);
+    padding-bottom:2px; cursor:pointer;
+  }
+  .see-all-link:hover{ color:var(--paper); }
+
+  /* ---------- CATEGORY / FILTER VIEW ---------- */
+  #categoryView{ display:none; }
+  .cat-header{
+    padding:20px 32px 0; display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  }
+  .back-link{
+    font-size:13px; color:var(--muted); cursor:pointer; white-space:nowrap;
+  }
+  .back-link:hover{ color:var(--paper); }
+  .cat-header h2{
+    font-family:'Fraunces', serif; font-weight:500; font-size:22px;
+  }
+  .filters{
+    padding:18px 32px; border-bottom:1px solid var(--line);
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+  }
+  .search-box{
+    flex:1; min-width:180px; background:rgba(243,236,225,0.06);
+    border:1px solid var(--line); border-radius:8px; padding:10px 14px;
+    font-size:13.5px; color:var(--paper);
+  }
+  .search-box::placeholder{ color:var(--muted); }
+  select{
+    background:rgba(243,236,225,0.06); border:1px solid var(--line);
+    border-radius:8px; padding:10px 12px; font-size:13px; color:var(--paper);
+  }
+  .cat-pill{
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line);
+    font-size:12.5px; font-weight:500; color:var(--paper); cursor:pointer;
+    background:transparent; white-space:nowrap;
+  }
+  .cat-pill.active{ font-weight:600; border-color:transparent; }
+  .cat-row{ padding:0 32px 16px; display:flex; gap:8px; flex-wrap:wrap; }
+
+  #gridView{ padding:24px 32px 70px; }
+  .grid{ columns:3 260px; column-gap:16px; }
+  .tile{
+    break-inside:avoid; margin-bottom:16px; position:relative; border-radius:6px;
+    overflow:hidden; color:var(--paper); display:flex; align-items:flex-end;
+    min-height:180px; cursor:pointer;
+    background-size:cover; background-position:center; background-color:#241E30;
+  }
+  .tile.no-photo{ border:1px solid var(--line); }
+  .tile-overlay{
+    position:relative; z-index:2; padding:14px 14px 13px; width:100%;
+    background:linear-gradient(0deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.7) 100%);
+  }
+  .cat-tag{
+    font-size:10px; text-transform:uppercase; letter-spacing:0.06em;
+    color:var(--amber); margin-bottom:4px; display:block; font-weight:700;
+    text-shadow:0 1px 3px rgba(0,0,0,0.8);
+  }
+  .tile-overlay h3{
+    font-family:'Fraunces', serif; font-weight:500; font-size:15.5px; line-height:1.25;
+    text-shadow:0 1px 4px rgba(0,0,0,0.8);
+  }
+  .tile-overlay .meta{
+    font-size:10.5px; color:rgba(243,236,225,0.85); margin-top:3px;
+    text-shadow:0 1px 4px rgba(0,0,0,0.8);
+  }
+  .tile-tags{ display:flex; gap:5px; flex-wrap:wrap; margin-top:8px; }
+  .tile-tag{
+    font-size:9.5px; font-weight:700; padding:3px 8px; border-radius:100px;
+    background:rgba(27,22,37,0.75); color:var(--paper); border:1px solid rgba(243,236,225,0.2);
+  }
+  .tile-tag.rose{ background:rgba(184,75,94,0.75); border-color:rgba(184,75,94,0.4); }
+  .verified-dot{
+    position:absolute; top:12px; right:12px; z-index:3;
+    background:rgba(27,22,37,0.85); color:var(--amber); font-size:9.5px;
+    font-weight:600; padding:4px 8px; border-radius:100px;
+    border:1px solid rgba(232,163,61,0.3);
+  }
+  .empty-state{ grid-column:1/-1; text-align:center; padding:60px 20px; color:var(--muted); font-size:14px; }
+
+  /* ---------- MAP ---------- */
+  #mapView{ display:none; height:calc(100vh - 200px); }
+  #leafletMap{ height:100%; width:100%; }
+  .leaflet-popup-content-wrapper{ background:var(--paper); color:var(--ink); border-radius:10px; }
+  .leaflet-popup-content{ font-family:'Inter', sans-serif; }
+  .popup-cat{ font-size:10px; color:var(--rose); font-weight:700; text-transform:uppercase; }
+  .popup-name{ font-family:'Fraunces', serif; font-size:15px; margin:2px 0 4px; }
+  .popup-link{ font-size:12px; font-weight:600; color:var(--dusk); }
+  .leaflet-tile-pane{ filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.88) saturate(0.7); }
+
+  /* ---------- DETAIL MODAL ---------- */
+  .modal-backdrop{
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7);
+    z-index:200; align-items:flex-start; justify-content:center; overflow-y:auto; padding:40px 16px;
+  }
+  .modal-backdrop.open{ display:flex; }
+  .detail-card{
+    background:var(--paper); color:var(--ink); border-radius:16px; overflow:hidden;
+    max-width:640px; width:100%; margin-top:20px;
+  }
+  .detail-hero{
+    height:260px; background-size:cover; background-position:center;
+    background-color:var(--dusk); position:relative; display:flex; align-items:flex-end; padding:24px;
+  }
+  .modal-close{
+    position:absolute; top:16px; right:16px; z-index:5; background:rgba(27,22,37,0.85);
+    color:var(--paper); border:none; width:32px; height:32px; border-radius:100px;
+    font-size:16px; cursor:pointer; line-height:1;
+  }
+  .detail-hero-overlay{
+    position:relative; z-index:2; width:100%;
+    background:linear-gradient(0deg, rgba(0,0,0,0.8) 10%, transparent 100%);
+    margin:-24px; padding:24px; padding-top:80px;
+  }
+  .detail-hero-title{ color:var(--paper); }
+  .detail-hero-title .cat-tag{ color:var(--amber); }
+  .detail-hero-title h1{ font-family:'Fraunces', serif; font-weight:500; font-size:26px; text-shadow:0 2px 6px rgba(0,0,0,0.6); }
+  .detail-hero-title .loc{ font-size:13px; color:rgba(243,236,225,0.85); margin-top:5px; }
+  .detail-verified{
+    display:inline-block; margin-top:8px; background:rgba(232,163,61,0.15); color:var(--amber);
+    font-size:11px; font-weight:700; padding:4px 10px; border-radius:100px; border:1px solid rgba(232,163,61,0.3);
+  }
+  .detail-body{ padding:26px 28px 30px; }
+  .detail-body h4{
+    font-family:'Fraunces', serif; font-weight:500; font-size:14px; margin-bottom:8px; color:var(--dusk);
+  }
+  .editor-take{
+    font-size:14px; line-height:1.6; color:rgba(27,22,37,0.85); background:rgba(58,42,77,0.06);
+    padding:14px 16px; border-radius:10px; border-left:3px solid var(--amber); margin-bottom:18px;
+  }
+  .tag-cloud{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px; }
+  .tag{ font-size:11px; font-weight:600; padding:5px 10px; border-radius:6px; background:rgba(58,42,77,0.08); color:var(--dusk); }
+  .tag.rose{ background:rgba(184,75,94,0.12); color:var(--rose); }
+  .fact-list{ border-top:1px solid rgba(27,22,37,0.08); }
+  .fact-row{
+    display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:13px;
+    padding:11px 2px; border-bottom:1px solid rgba(27,22,37,0.08);
+  }
+  .fact-row .label{ color:rgba(27,22,37,0.55); white-space:nowrap; }
+  .fact-row .val{ font-weight:600; text-align:right; }
+  .detail-actions{ display:flex; gap:10px; margin-top:20px; }
+  .btn{
+    flex:1; text-align:center; padding:12px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;
+  }
+  .btn-primary{ background:var(--ink); color:var(--paper); }
+  .btn-secondary{ background:rgba(58,42,77,0.08); color:var(--dusk); }
+
+  /* ---------- COLLECTIONS ---------- */
+  #collectionsView{ display:none; padding:40px 32px 70px; max-width:1200px; margin:0 auto; }
+  .coll-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:20px; margin-top:28px; }
+  .coll-card{
+    border-radius:14px; overflow:hidden; border:1px solid var(--line); cursor:pointer;
+    background:rgba(243,236,225,0.04);
+  }
+  .coll-cover{ height:160px; background-size:cover; background-position:center; background-color:var(--dusk); }
+  .coll-info{ padding:16px 18px; }
+  .coll-info h3{ font-family:'Fraunces', serif; font-weight:500; font-size:17px; }
+  .coll-info p{ font-size:12.5px; color:var(--muted); margin-top:6px; line-height:1.5; }
+  .coll-info .count{ font-size:11px; color:var(--amber); margin-top:8px; font-weight:600; }
+
+  footer{
+    text-align:center; padding:36px 20px; font-size:12px; color:var(--muted);
+    border-top:1px solid var(--line);
+  }
+  .footer-email{
+    font-size:13px; color:var(--paper); font-weight:600; margin-bottom:6px;
+  }
+  .footer-caption{ font-size:12.5px; color:var(--muted); margin-bottom:16px; }
+  .footer-insta{
+    display:inline-flex; align-items:center; gap:7px; font-size:13px;
+    color:var(--amber); font-weight:600; margin-bottom:8px;
+  }
+  .footer-insta svg{ width:16px; height:16px; }
+  .footer-tag{ font-size:11.5px; color:var(--muted); margin-top:14px; }
+  .loading{ text-align:center; padding:60px 20px; color:var(--muted); font-size:13px; grid-column:1/-1; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo-link" id="logoHome"><img src="logo.png" alt="Date Night Mumbai"></a>
+  <div class="nav-right">
+    <span class="nav-link" id="navAllSpots">All Spots</span>
+    <span class="nav-link" id="navCollections">Collections</span>
+  </div>
+</nav>
+
+<!-- ================= HOMEPAGE ================= -->
+<div id="homeView">
+  <div class="home-kicker">Mumbai · Verified Spots</div>
+  <div class="home-title">Date Night Mumbai</div>
+  <div class="home-sub">A curated directory of the best date spots across Mumbai: verified restaurants, bars, museums, activities, and free outdoor spots. Pick a category below to start browsing.</div>
+  <div class="cat-tiles" id="catTiles"><div class="loading">Loading…</div></div>
+  <div class="see-all-row"><span class="see-all-link" id="seeAllLink">Or browse everything at once →</span></div>
+</div>
+
+<!-- ================= CATEGORY / GRID / MAP VIEW ================= -->
+<div id="categoryView">
+  <div class="cat-header">
+    <span class="back-link" id="backLink">← Back</span>
+    <h2 id="catHeaderTitle">All Spots</h2>
+    <div class="view-toggle" style="margin-left:auto;">
+      <button id="btnGrid" class="active">Grid</button>
+      <button id="btnMap">Map</button>
+    </div>
+  </div>
+
+  <div class="filters">
+    <input class="search-box" id="searchInput" placeholder="Search by name or neighbourhood...">
+    <select id="neighbourhoodFilter"><option value="">All neighbourhoods</option></select>
+    <select id="priceFilter">
+      <option value="">Any price</option>
+      <option value="Free">Free</option>
+      <option value="Under Rs1,000">Under ₹1,000</option>
+      <option value="Rs1,000-3,000">₹1,000–3,000</option>
+      <option value="Rs3,000+">₹3,000+</option>
+    </select>
+  </div>
+  <div class="cat-row" id="categoryRow">
+    <button class="cat-pill active" data-cat="">All</button>
+    <button class="cat-pill" data-cat="Restaurants & Cafes">Restaurants & Cafes</button>
+    <button class="cat-pill" data-cat="Rooftops & Bars">Rooftops & Bars</button>
+    <button class="cat-pill" data-cat="Culture & Museums">Culture & Museums</button>
+    <button class="cat-pill" data-cat="Activities & Experiences">Activities & Experiences</button>
+    <button class="cat-pill" data-cat="Outdoors & Free">Outdoors & Free</button>
+  </div>
+
+  <div id="gridView"><div class="grid" id="grid"><div class="loading">Loading spots…</div></div></div>
+  <div id="mapView"><div id="leafletMap"></div></div>
+</div>
+
+<!-- ================= COLLECTIONS VIEW ================= -->
+<div id="collectionsView">
+  <div class="cat-header" style="padding:0;">
+    <span class="back-link" id="backFromCollections">← Back</span>
+  </div>
+  <div class="home-title" style="margin-top:20px;">Collections</div>
+  <div class="home-sub">Hand-picked sets of spots, curated for specific moments.</div>
+  <div class="coll-grid" id="collGrid"><div class="loading">Loading collections…</div></div>
+</div>
+
+<footer>
+  <div class="footer-email">datenightmumbai@gmail.com</div>
+  <div class="footer-caption">DM to have your spot featured, or submit a location to us.</div>
+  <a class="footer-insta" href="https://www.instagram.com/datenightmumbai" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+    @datenightmumbai
+  </a>
+  <div class="footer-tag">Follow us for the latest updates.</div>
+  <div class="footer-tag" style="margin-top:20px;">Date Night Mumbai: verified spots, curated by hand.</div>
+</footer>
+
+<!-- ================= DETAIL MODAL ================= -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="detail-card" id="detailCard"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* =========================================================
+   CONFIG
+   ========================================================= */
+const AIRTABLE_BASE_ID   = "appymgOj0fBs13ykQ";
+const AIRTABLE_TABLE_NAME = "List of Locations";
+const AIRTABLE_COLLECTIONS_TABLE = "Collections";
+const AIRTABLE_PAT        = "patADgJRmGUPrQECT.53aed39ac4e9a3ec87c7f4ee9502504922652b59b332e5b302332b4193e544bd";
+/* ========================================================= */
+
+const CATEGORIES = ["Restaurants & Cafes","Rooftops & Bars","Culture & Museums","Activities & Experiences","Outdoors & Free"];
+const CATEGORY_COLORS = {
+  "Restaurants & Cafes": "#B84B5E",
+  "Rooftops & Bars": "#E8A33D",
+  "Culture & Museums": "#7D8FBF",
+  "Activities & Experiences": "#6FA88C",
+  "Outdoors & Free": "#9BB16C",
+};
+
+let allRecords = [];
+let collectionRecords = [];
+let activeCategory = "";
+let activeNeighbourhood = "";
+let activePrice = "";
+let map, markersLayer;
+
+// Handles both real Airtable Multiple-select API shape (array) and comma-string fallback
+function selectToArray(val) {
+  if (!val) return [];
+  if (Array.isArray(val)) return val;
+  return String(val).split(",").map(s => s.trim()).filter(Boolean);
+}
+
+function getPhotoUrl(fields, index) {
+  const key = `Auto - Photo URL ${index || 1}`;
+  const val = fields[key];
+  if (!val) return "";
+  if (Array.isArray(val) && val.length > 0) {
+    const att = val[0];
+    return (att.thumbnails && att.thumbnails.large && att.thumbnails.large.url) || att.url || "";
+  }
+  if (typeof val === "string") return val;
+  return "";
+}
+
+async function fetchAllFromTable(tableName) {
+  let records = [];
+  let offset = null;
+  do {
+    let urlStr = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(tableName)}?pageSize=100`;
+    if (offset) urlStr += `&offset=${encodeURIComponent(offset)}`;
+    const res = await fetch(urlStr, { headers: { Authorization: `Bearer ${AIRTABLE_PAT}` } });
+    if (!res.ok) throw new Error(`${tableName} fetch failed: ${res.status}`);
+    const data = await res.json();
+    records = records.concat(data.records);
+    offset = data.offset;
+  } while (offset);
+  return records;
+}
+
+function isLive(fields) {
+  return !!fields["CHECK - Live"] && !fields["CHECK - Flag: Do Not Publish (closed/bad fit)"];
+}
+
+function passesFilters(fields) {
+  if (activeCategory && fields["SELECT - Category"] !== activeCategory) return false;
+  if (activePrice && fields["SELECT - Price for Two"] !== activePrice) return false;
+  if (activeNeighbourhood && fields["Auto - Neighbourhood"] !== activeNeighbourhood) return false;
+  const q = document.getElementById("searchInput").value.trim().toLowerCase();
+  if (q) {
+    const name = (fields["Auto - Name"] || "").toLowerCase();
+    const hood = (fields["Auto - Neighbourhood"] || "").toLowerCase();
+    if (!name.includes(q) && !hood.includes(q)) return false;
+  }
+  return true;
+}
+
+function tileTagsHtml(f) {
+  const vibe = selectToArray(f["SELECT - Vibe"]).map(v => `<span class="tile-tag">${v}</span>`);
+  const bestFor = selectToArray(f["SELECT - Best For"]).map(v => `<span class="tile-tag rose">${v}</span>`);
+  const all = [...vibe, ...bestFor].slice(0, 3); // cap at 3 so small cards don't get cluttered
+  return all.length ? `<div class="tile-tags">${all.join("")}</div>` : "";
+}
+
+function tileHtml(r) {
+  const f = r.fields;
+  const catLabel = f["SELECT - Category"] || "Uncategorized";
+  const priceLabel = f["SELECT - Price for Two"] || "";
+  const photo = getPhotoUrl(f);
+  const verified = f["CHECK - Editor Verified"] ? `<div class="verified-dot">✦ Verified</div>` : "";
+  const bg = photo ? `background-image:url('${photo}');` : "";
+  const noPhotoClass = photo ? "" : " no-photo";
+  return `
+    <div class="tile${noPhotoClass}" style="${bg}" data-id="${r.id}">
+      ${verified}
+      <div class="tile-overlay">
+        <span class="cat-tag">${catLabel}</span>
+        <h3>${f["Auto - Name"] || "Untitled"}</h3>
+        <div class="meta">${f["Auto - Neighbourhood"] || ""}${priceLabel ? " · " + priceLabel : ""}</div>
+        ${tileTagsHtml(f)}
+      </div>
+    </div>`;
+}
+
+/* ---------------- HOMEPAGE CATEGORY TILES ---------------- */
+function renderCategoryTiles() {
+  const container = document.getElementById("catTiles");
+  container.innerHTML = CATEGORIES.map(cat => {
+    const spotsInCat = allRecords.filter(r => isLive(r.fields) && r.fields["SELECT - Category"] === cat);
+    const withPhoto = spotsInCat
+      .filter(r => getPhotoUrl(r.fields))
+      .sort((a, b) => (parseFloat(b.fields["Auto - Google Rating"]) || 0) - (parseFloat(a.fields["Auto - Google Rating"]) || 0))[0];
+    const bg = withPhoto ? `background-image:url('${getPhotoUrl(withPhoto.fields)}');` : `background:linear-gradient(160deg, ${CATEGORY_COLORS[cat]}55, var(--ink));`;
+    return `
+      <div class="cat-tile" style="${bg}" data-cat="${cat}">
+        <div class="cat-tile-overlay">
+          <h3>${cat}</h3>
+          <div class="count">${spotsInCat.length} spot${spotsInCat.length !== 1 ? "s" : ""}</div>
+        </div>
+      </div>`;
+  }).join("");
+  container.querySelectorAll(".cat-tile").forEach(tile => {
+    tile.addEventListener("click", () => openCategory(tile.dataset.cat));
+  });
+}
+
+/* ---------------- VIEW SWITCHING ---------------- */
+function showView(view) {
+  document.getElementById("homeView").style.display = view === "home" ? "block" : "none";
+  document.getElementById("categoryView").style.display = view === "category" ? "block" : "none";
+  document.getElementById("collectionsView").style.display = view === "collections" ? "block" : "none";
+  document.getElementById("navCollections").classList.toggle("active", view === "collections");
+}
+
+function openCategory(cat) {
+  activeCategory = cat || "";
+  document.getElementById("catHeaderTitle").textContent = cat || "All Spots";
+  document.querySelectorAll(".cat-pill").forEach(b => {
+    const isMatch = (b.dataset.cat === activeCategory);
+    b.classList.toggle("active", isMatch);
+    b.style.background = isMatch ? (CATEGORY_COLORS[b.dataset.cat] || "var(--amber)") : "transparent";
+    b.style.color = isMatch ? "var(--ink)" : "var(--paper)";
+  });
+  showView("category");
+  rerender();
+}
+
+document.getElementById("seeAllLink").addEventListener("click", () => openCategory(""));
+document.getElementById("navAllSpots").addEventListener("click", () => openCategory(""));
+document.getElementById("backLink").addEventListener("click", () => showView("home"));
+document.getElementById("logoHome").addEventListener("click", () => showView("home"));
+document.getElementById("navCollections").addEventListener("click", () => { showView("collections"); renderCollections(); });
+document.getElementById("backFromCollections").addEventListener("click", () => showView("home"));
+
+/* ---------------- GRID ---------------- */
+function renderGrid() {
+  const grid = document.getElementById("grid");
+  const visible = allRecords
+    .filter(r => isLive(r.fields) && passesFilters(r.fields))
+    .sort((a, b) => (a.fields["Auto - Name"] || "").localeCompare(b.fields["Auto - Name"] || ""));
+  if (visible.length === 0) {
+    grid.innerHTML = `<div class="empty-state">No spots match those filters yet.</div>`;
+    return;
+  }
+  grid.innerHTML = visible.map(r => tileHtml(r)).join("");
+  grid.querySelectorAll(".tile").forEach(t => t.addEventListener("click", () => openDetail(t.dataset.id)));
+}
+
+/* ---------------- MAP ---------------- */
+function renderMap() {
+  if (!map) {
+    map = L.map("leafletMap").setView([19.0760, 72.8777], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors', subdomains: 'abc', maxZoom: 19,
+    }).addTo(map);
+    markersLayer = L.layerGroup().addTo(map);
+  }
+  markersLayer.clearLayers();
+  const visible = allRecords.filter(r => isLive(r.fields) && passesFilters(r.fields));
+  visible.forEach(r => {
+    const f = r.fields;
+    const lat = parseFloat(f["Auto - Latitude"]);
+    const lng = parseFloat(f["Auto - Longitude"]);
+    if (isNaN(lat) || isNaN(lng)) return;
+    const catLabel = f["SELECT - Category"] || "";
+    const color = CATEGORY_COLORS[catLabel] || "#F3ECE1";
+    const marker = L.circleMarker([lat, lng], { radius: 7, color, fillColor: color, fillOpacity: 0.85, weight: 1 });
+    marker.bindPopup(`
+      <div class="popup-cat">${catLabel}</div>
+      <div class="popup-name">${f["Auto - Name"] || ""}</div>
+      <a class="popup-link" href="#" onclick="openDetail('${r.id}'); return false;">View details</a>
+    `);
+    marker.addTo(markersLayer);
+  });
+}
+
+function populateNeighbourhoodFilter() {
+  const select = document.getElementById("neighbourhoodFilter");
+  const hoods = [...new Set(allRecords.map(r => r.fields["Auto - Neighbourhood"]).filter(Boolean))].sort();
+  hoods.forEach(h => {
+    const opt = document.createElement("option");
+    opt.value = h; opt.textContent = h;
+    select.appendChild(opt);
+  });
+}
+
+let isMapViewActive = false;
+
+function rerender() {
+  renderGrid();
+  if (isMapViewActive) {
+    try { renderMap(); } catch (err) { console.error("Map render failed:", err); }
+  }
+}
+
+document.getElementById("searchInput").addEventListener("input", rerender);
+document.getElementById("neighbourhoodFilter").addEventListener("change", e => { activeNeighbourhood = e.target.value; rerender(); });
+document.getElementById("priceFilter").addEventListener("change", e => { activePrice = e.target.value; rerender(); });
+document.querySelectorAll(".cat-pill").forEach(btn => {
+  btn.addEventListener("click", () => openCategory(btn.dataset.cat));
+});
+document.getElementById("btnGrid").addEventListener("click", () => {
+  isMapViewActive = false;
+  document.getElementById("btnGrid").classList.add("active");
+  document.getElementById("btnMap").classList.remove("active");
+  document.getElementById("gridView").style.display = "block";
+  document.getElementById("mapView").style.display = "none";
+});
+document.getElementById("btnMap").addEventListener("click", () => {
+  isMapViewActive = true;
+  document.getElementById("btnMap").classList.add("active");
+  document.getElementById("btnGrid").classList.remove("active");
+  document.getElementById("gridView").style.display = "none";
+  document.getElementById("mapView").style.display = "block";
+  try { renderMap(); } catch (err) { console.error("Map render failed:", err); }
+  setTimeout(() => map && map.invalidateSize(), 100);
+});
+
+/* ---------------- DETAIL MODAL ---------------- */
+function openDetail(recordId) {
+ try {
+  const record = allRecords.find(r => r.id === recordId);
+  if (!record) { console.error("openDetail: no record found for id", recordId); return; }
+  const f = record.fields;
+  const photo = getPhotoUrl(f) || getPhotoUrl(f,2) || getPhotoUrl(f,3);
+  const catLabel = f["SELECT - Category"] || "";
+  const verified = f["CHECK - Editor Verified"]
+    ? `<div class="detail-verified">✦ Editor Verified</div>` : "";
+  const take = f["TEXT - Editor's Take"]
+    ? `<div class="editor-take">${f["TEXT - Editor's Take"]}</div>` : "";
+
+  const tags = [];
+  selectToArray(f["SELECT - Vibe"]).forEach(v => tags.push(`<span class="tag">${v}</span>`));
+  selectToArray(f["SELECT - Best For"]).forEach(v => tags.push(`<span class="tag rose">${v}</span>`));
+
+  const facts = [
+    ["Neighbourhood", f["Auto - Neighbourhood"]],
+    ["Price for two", f["SELECT - Price for Two"]],
+    ["Phone", f["Auto - Phone"]],
+    ["Best time", selectToArray(f["SELECT - Best Time"]).join(", ")],
+    ["Reservation", f["CHECK - Reservation Required"] ? "Required" : (f["CHECK - Reservation Recommended"] ? "Recommended" : "Walk-in fine")],
+    ["Seating", [f["CHECK - Indoor Seating"] ? "Indoor" : "", f["CHECK - Outdoor Seating"] ? "Outdoor" : ""].filter(Boolean).join(" + ") || "—"],
+    ["Dress code", f["CHECK - Dress Code Required"] ? "Required" : "Casual"],
+    ["Alcohol served", f["CHECK - Alcohol Served"] ? "Yes" : "—"],
+    ["Parking", f["CHECK - Parking Available"] ? "Available" : "Not confirmed"],
+    ["Google rating", f["Auto - Google Rating"] ? `${f["Auto - Google Rating"]} ★` : "—"],
+  ];
+
+  document.getElementById("detailCard").innerHTML = `
+    <div class="detail-hero" style="${photo ? `background-image:url('${photo}')` : ''}">
+      <button class="modal-close" onclick="closeDetail()">✕</button>
+      <div class="detail-hero-overlay">
+        <div class="detail-hero-title">
+          <span class="cat-tag">${catLabel}</span>
+          <h1>${f["Auto - Name"] || ""}</h1>
+          <div class="loc">${f["Auto - Neighbourhood"] || ""}${f["SELECT - Price for Two"] ? " · " + f["SELECT - Price for Two"] : ""}</div>
+          ${verified}
+        </div>
+      </div>
+    </div>
+    <div class="detail-body">
+      ${take}
+      ${tags.length ? `<div class="tag-cloud">${tags.join("")}</div>` : ""}
+      <div class="fact-list">
+        ${facts.map(([label,val]) => `<div class="fact-row"><span class="label">${label}</span><span class="val">${val || "—"}</span></div>`).join("")}
+      </div>
+      <div class="detail-actions">
+        <a class="btn btn-primary" href="${f["Auto - Google Maps URL"] || "#"}" target="_blank" rel="noopener">Open in Google Maps</a>
+        ${f["Auto - Website"] ? `<a class="btn btn-secondary" href="${f["Auto - Website"]}" target="_blank" rel="noopener">Website</a>` : ""}
+      </div>
+    </div>
+  `;
+  document.getElementById("modalBackdrop").classList.add("open");
+ } catch (err) {
+  console.error("openDetail failed:", err);
+ }
+}
+function closeDetail() { document.getElementById("modalBackdrop").classList.remove("open"); }
+document.getElementById("modalBackdrop").addEventListener("click", (e) => {
+  if (e.target.id === "modalBackdrop") closeDetail();
+});
+
+/* ---------------- COLLECTIONS ---------------- */
+async function renderCollections() {
+  const grid = document.getElementById("collGrid");
+  if (collectionRecords === null) {
+    grid.innerHTML = `<div class="empty-state">Collections coming soon.</div>`;
+    return;
+  }
+  const liveCollections = collectionRecords.filter(c => !!c.fields["CHECK - Live"]);
+  if (liveCollections.length === 0) {
+    grid.innerHTML = `<div class="empty-state">No collections live yet. Check the "Live" box on a collection in Airtable to publish it here.</div>`;
+    return;
+  }
+  grid.innerHTML = liveCollections.map(c => {
+    const f = c.fields;
+    const cover = f["Cover Photo"] && f["Cover Photo"][0] ? f["Cover Photo"][0].url : "";
+    const linkedIds = f["Locations"] || [];
+    const bg = cover ? `background-image:url('${cover}');` : "";
+    return `
+      <div class="coll-card" data-id="${c.id}">
+        <div class="coll-cover" style="${bg}"></div>
+        <div class="coll-info">
+          <h3>${f["Name"] || "Untitled collection"}</h3>
+          <p>${f["Description"] || ""}</p>
+          <div class="count">${linkedIds.length} spot${linkedIds.length !== 1 ? "s" : ""}</div>
+        </div>
+      </div>`;
+  }).join("");
+  grid.querySelectorAll(".coll-card").forEach(card => {
+    card.addEventListener("click", () => openCollectionSpots(card.dataset.id));
+  });
+}
+
+function openCollectionSpots(collectionId) {
+  const coll = collectionRecords.find(c => c.id === collectionId);
+  if (!coll) return;
+  const linkedIds = coll.fields["Locations"] || [];
+  activeCategory = "";
+  document.getElementById("catHeaderTitle").textContent = coll.fields["Name"] || "Collection";
+  document.querySelectorAll(".cat-pill").forEach(b => b.classList.remove("active"));
+  showView("category");
+  const grid = document.getElementById("grid");
+  const visible = allRecords
+    .filter(r => linkedIds.includes(r.id) && isLive(r.fields))
+    .sort((a, b) => (a.fields["Auto - Name"] || "").localeCompare(b.fields["Auto - Name"] || ""));
+  if (visible.length === 0) {
+    grid.innerHTML = `<div class="empty-state">No live spots in this collection yet.</div>`;
+    return;
+  }
+  grid.innerHTML = visible.map(r => tileHtml(r)).join("");
+  grid.querySelectorAll(".tile").forEach(t => t.addEventListener("click", () => openDetail(t.dataset.id)));
+}
+
+/* ---------------- INIT ---------------- */
+(async function init() {
+  try {
+    allRecords = await fetchAllFromTable(AIRTABLE_TABLE_NAME);
+    populateNeighbourhoodFilter();
+    renderCategoryTiles();
+  } catch (err) {
+    document.getElementById("catTiles").innerHTML =
+      `<div class="empty-state">Couldn't load spots: ${err.message}</div>`;
+    console.error(err);
+  }
+  try {
+    collectionRecords = await fetchAllFromTable(AIRTABLE_COLLECTIONS_TABLE);
+  } catch (err) {
+    collectionRecords = null; // table probably doesn't exist yet — handled gracefully in renderCollections
+    console.warn("Collections table not available yet:", err.message);
+  }
+})();
+</script>
+</body>
+</html>
