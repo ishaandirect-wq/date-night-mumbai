@@ -1,43 +1,41 @@
-DATE NIGHT MUMBAI V3 — DEPLOY
+DATE NIGHT MUMBAI V3.2 — DEPLOY
 
-Files in this folder:
+WHAT THIS VERSION DOES
+- Keeps the V3 visual direction and V3.1 header fixes.
+- Surprise Me now lets users pick a lane, avoids immediate repeats, and adds “Try another in this lane”.
+- Save is always available in spot details, even when a venue has a website.
+- Unknown reservation status now says “Not confirmed” instead of assuming walk-ins are fine.
+- Adds site-level Open Graph/Twitter sharing metadata.
+- Adds “Start from what you need today” using real Best For tags from Airtable.
+- Adds editorial Explore Mumbai area cards with live counts and imagery.
+- Adds Area as a proper browse filter and URL state.
+- Adds Near me, opt-in only, which sorts live spots by distance without storing location.
+- Adds “A few we’d actually pick” from Editor Verified + Editor’s Take records.
+- Adds active context chips so area / intent / collection filters are obvious and removable.
+- Adds Suggest a spot + Report an issue feedback loops.
+- Preserves the curated-over-exhaustive product philosophy.
+
+IMPORTANT: OPEN NOW
+We did NOT add an “Open now” filter yet. The current Airtable schema supplied to the site does not include reliable structured opening-hours data. Showing it without that data would manufacture certainty. Add it only once opening hours are being stored and maintained.
+
+DEPLOY
+Upload the ENTIRE date-night-mumbai-v3-2 folder / zip to the existing Vercel project. It contains:
 - index.html
 - logo.png
 - api/airtable.js
 
-WHY THERE IS NOW AN /api FOLDER
-Your old index.html contained the Airtable Personal Access Token directly in public browser code. Anyone visiting the site could retrieve it. V3 moves Airtable fetching into a tiny Vercel serverless function so the token stays private.
+Keep your existing Vercel environment variable:
+AIRTABLE_PAT = your current rotated Airtable token
 
-DO THIS IN VERCEL
-1. Replace your old index.html with this index.html.
-2. Replace/add logo.png.
-3. Add the api folder and airtable.js exactly as supplied.
-4. In Vercel, open your Date Night Mumbai project.
-5. Go to Settings > Environment Variables.
-6. Add one environment variable:
-   AIRTABLE_PAT = a NEW Airtable personal access token
-7. Redeploy.
+No Airtable field names were changed and no new Airtable fields are required for this release.
 
-IMPORTANT SECURITY STEP
-Because the old token lived in public frontend code, revoke/rotate that old token in Airtable and use the new token only as the AIRTABLE_PAT environment variable in Vercel.
-
-WHAT CHANGED
-- Full responsive mobile + desktop redesign
-- New hero built around “what are we doing tonight?”
-- Daily wildcard + Surprise Us
-- Quick date-type shortcuts
-- Sharper Airtable images by using original attachment URLs first
-- Cleaner consistent spot cards
-- Save/favourite spots locally in the browser
-- Shareable spot deep links
-- Better collections presentation
-- Full-screen mobile detail sheet
-- Mobile bottom navigation
-- Mobile filter sheet
-- Improved map presentation and automatic fit-to-results
-- Search across name, neighbourhood, category, vibe and best-for tags
-- Better loading, empty and error states
-- Reduced-motion accessibility support
-- Airtable token removed from frontend
-
-No Airtable field names were renamed. The site still uses your existing schema.
+After deploy, test:
+1. Desktop header + homepage
+2. Surprise Me > each lane > Try another
+3. Save on a venue that also has a Website
+4. Explore Mumbai area cards
+5. Best For shortcut chips
+6. Near me permission + sorting
+7. Mobile filters, especially Area
+8. Grid / Map switch
+9. Share a normal site link in WhatsApp/iMessage to inspect the preview

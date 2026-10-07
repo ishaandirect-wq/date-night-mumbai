@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1B1625">
 <meta name="description" content="Date Night Mumbai. Curated date spots, ideas and collections across Mumbai.">
+<meta property="og:title" content="Date Night Mumbai">
+<meta property="og:description" content="Good dates do not need 47 tabs. Find a date spot, pick a neighbourhood, or let us choose.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://date-night-mumbai-v2.vercel.app/">
+<meta property="og:image" content="https://date-night-mumbai-v2.vercel.app/logo.png">
+<meta property="og:image:alt" content="Date Night Mumbai">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Date Night Mumbai">
+<meta name="twitter:description" content="Curated date spots and ideas across Mumbai. Fewer places, better reasons to go.">
+<meta name="twitter:image" content="https://date-night-mumbai-v2.vercel.app/logo.png">
 <title>Date Night Mumbai</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23D40000' d='M16 28s-11-7.2-14-14.2C0.3 8.4 3 3 8.5 3c3 0 5.3 1.7 7.5 4.6C18.2 4.7 20.5 3 23.5 3 29 3 31.7 8.4 30 13.8 27 21 16 28 16 28z'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,16 +57,19 @@ img{display:block;max-width:100%}
 
 /* NAV */
 .top-nav{
-  height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;
-  padding:0 clamp(18px,4vw,54px);position:sticky;top:0;z-index:80;
+  height:var(--nav-h);display:flex;align-items:center;gap:22px;
+  padding:0 clamp(16px,3vw,44px);position:sticky;top:0;z-index:80;width:100%;min-width:0;
   background:linear-gradient(180deg,rgba(27,22,37,.96),rgba(27,22,37,.86));
   backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line)
 }
-.brand{display:flex;align-items:center;gap:12px;cursor:pointer;border:0;background:transparent;min-width:0}
-.brand img{width:118px;height:54px;object-fit:contain;object-position:center}
+.brand{display:flex;align-items:center;cursor:pointer;border:0;background:transparent;min-width:0;flex:0 0 auto}
+.brand img{display:none}
+.brand-lockup{display:flex;flex-direction:column;align-items:flex-start;color:var(--red-bright);line-height:.82}
+.brand-lockup-main{font-family:'Bodoni Moda',serif;font-size:27px;font-weight:500;letter-spacing:-.055em;white-space:nowrap}
+.brand-lockup-city{font-size:7px;line-height:1;letter-spacing:.22em;text-transform:uppercase;color:var(--paper-2);font-weight:800;margin:5px 0 0 2px}
 .brand-mark{display:none;font-family:'Bodoni Moda',serif;font-size:24px;color:var(--red-bright)}
-.nav-links{display:flex;align-items:center;gap:7px}
-.nav-btn{border:0;background:transparent;padding:10px 14px;border-radius:999px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;transition:.2s ease}
+.nav-links{display:flex;align-items:center;gap:4px;margin-left:auto;min-width:0;flex:0 1 auto}
+.nav-btn{border:0;background:transparent;padding:10px 12px;border-radius:999px;color:var(--muted);font-size:12.5px;font-weight:600;cursor:pointer;transition:.2s ease;white-space:nowrap}
 .nav-btn:hover{color:var(--paper);background:rgba(255,255,255,.05)}
 .nav-btn.active{color:#fff;background:rgba(208,0,0,.16)}
 .nav-primary{border:1px solid rgba(208,0,0,.55);color:#fff;background:rgba(208,0,0,.10)}
@@ -297,6 +310,76 @@ img{display:block;max-width:100%}
 .sheet-select{width:100%;height:48px;border:1px solid rgba(27,22,37,.12);background:#fff;color:var(--bg);border-radius:12px;padding:0 12px}
 .sheet-apply{width:100%;height:50px;border:0;border-radius:14px;background:var(--bg);color:#fff;font-weight:800;margin-top:20px;cursor:pointer}
 
+/* SURPRISE PICKER */
+.surprise-backdrop{display:none;position:fixed;inset:0;z-index:190;background:rgba(10,7,13,.76);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:22px}
+.surprise-backdrop.open{display:flex;animation:fadeIn .18s ease both}
+.surprise-panel{width:min(590px,100%);background:var(--paper);color:var(--bg);border-radius:28px;padding:30px;position:relative;box-shadow:0 40px 120px rgba(0,0,0,.52);animation:cardIn .28s cubic-bezier(.2,.8,.2,1) both}
+.surprise-close{position:absolute;right:18px;top:18px;width:38px;height:38px;border-radius:50%;border:1px solid rgba(27,22,37,.10);background:#EEE7DF;color:var(--bg);display:grid;place-items:center;cursor:pointer}
+.surprise-close svg{width:16px;height:16px}
+.surprise-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--red);font-weight:900;margin-bottom:9px}
+.surprise-title{font-family:'Bodoni Moda',serif;font-size:42px;font-weight:500;letter-spacing:-.04em;line-height:.96;max-width:470px;padding-right:42px}
+.surprise-copy{font-size:13px;line-height:1.55;color:#746B78;max-width:470px;margin-top:12px}
+.surprise-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:24px}
+.surprise-option{min-height:68px;border:1px solid rgba(27,22,37,.11);background:#FDFBF8;color:var(--bg);border-radius:15px;padding:12px 13px;text-align:left;cursor:pointer;transition:.18s ease;position:relative}
+.surprise-option:hover{transform:translateY(-1px);border-color:rgba(208,0,0,.30)}
+.surprise-option.wide{grid-column:1/-1;min-height:76px;background:linear-gradient(135deg,rgba(208,0,0,.07),#FDFBF8 62%)}
+.surprise-option[aria-pressed="true"]{background:var(--bg);color:#fff;border-color:var(--bg);box-shadow:0 10px 26px rgba(27,22,37,.16)}
+.surprise-option-name{display:block;font-family:'Bodoni Moda',serif;font-size:20px;letter-spacing:-.025em;line-height:1}
+.surprise-option-sub{display:block;font-size:10.5px;line-height:1.35;color:#817684;margin-top:5px}
+.surprise-option[aria-pressed="true"] .surprise-option-sub{color:#CFC5D1}
+.surprise-go{width:100%;height:52px;border:0;border-radius:15px;background:var(--red);color:#fff;font-weight:900;margin-top:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:.2s ease;box-shadow:0 12px 30px rgba(208,0,0,.18)}
+.surprise-go:hover{background:var(--red-bright);transform:translateY(-1px)}
+.surprise-go:disabled{opacity:.72;cursor:wait;transform:none}
+.surprise-go svg{width:16px;height:16px}
+.surprise-foot{font-size:10.5px;color:#968D99;text-align:center;margin-top:10px}
+
+
+/* DNM V3.2 — DECISION-FIRST DISCOVERY */
+.intent-strip{display:flex;gap:9px;flex-wrap:wrap}
+.intent-chip{border:1px solid var(--line);background:rgba(255,255,255,.025);color:var(--paper-2);border-radius:999px;padding:11px 14px;font-size:12px;font-weight:700;cursor:pointer;transition:.18s ease;display:flex;gap:7px;align-items:center}
+.intent-chip:hover{border-color:rgba(240,24,24,.5);background:rgba(208,0,0,.09);color:#fff;transform:translateY(-1px)}
+.intent-chip .intent-count{font-size:9.5px;color:var(--muted);font-weight:700}
+.compact-section{padding-top:52px}
+
+.area-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+.area-card{grid-column:span 6;min-height:250px;position:relative;overflow:hidden;border-radius:22px;border:1px solid var(--line);background:var(--panel);cursor:pointer;isolation:isolate;transition:.28s cubic-bezier(.2,.8,.2,1)}
+.area-card:nth-child(3n){grid-column:span 5}.area-card:nth-child(3n+1){grid-column:span 7}
+.area-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.2);box-shadow:0 18px 48px rgba(0,0,0,.25)}
+.area-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.area-card:hover img{transform:scale(1.035)}
+.area-card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,6,12,.16),rgba(9,6,12,.36) 42%,rgba(9,6,12,.94));z-index:1}
+.area-card-content{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:22px}
+.area-card h3{font-family:'Bodoni Moda',serif;font-size:34px;font-weight:500;letter-spacing:-.035em;line-height:1}
+.area-card p{font-size:12px;line-height:1.48;color:rgba(255,255,255,.82);max-width:520px;margin-top:8px}
+.area-card-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px;color:rgba(255,255,255,.68);font-size:10.5px;font-weight:700}
+.area-card .arrow{position:absolute;right:18px;top:18px;width:38px;height:38px;border-radius:50%;background:rgba(16,11,21,.36);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);display:grid;place-items:center;z-index:3;transition:.2s ease}
+.area-card:hover .arrow{background:var(--red);border-color:var(--red);transform:translate(2px,-2px)}
+.area-card .arrow svg{width:15px;height:15px}
+
+.pick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.pick-grid .spot-card:nth-child(n+7){display:none}
+
+.filter-bar{grid-template-columns:minmax(250px,1.35fr) .58fr .68fr .5fr auto auto}
+.near-btn{height:44px;padding:0 13px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.045);color:var(--paper);font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:7px;transition:.18s ease}
+.near-btn:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.07)}
+.near-btn.active{background:rgba(208,0,0,.14);border-color:rgba(240,24,24,.5);color:#fff}
+.near-btn svg{width:15px;height:15px}
+.active-contexts{display:flex;gap:7px;flex-wrap:wrap;padding:0 0 12px}
+.active-contexts:empty{display:none}
+.context-pill{display:flex;align-items:center;gap:6px;border:1px solid rgba(240,24,24,.28);background:rgba(208,0,0,.08);color:#F8DEDE;border-radius:999px;padding:6px 9px;font-size:9.5px;font-weight:750}
+.context-pill button{border:0;background:transparent;color:inherit;cursor:pointer;font-size:12px;line-height:1;padding:0}
+
+.detail-actions{grid-template-columns:1.15fr 1fr auto}
+.detail-secondary-links{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.detail-secondary-links a,.detail-secondary-links button{border:0;background:transparent;padding:0;color:#7E7482;font-size:10.5px;font-weight:800;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(27,22,37,.18)}
+.detail-secondary-links a:hover,.detail-secondary-links button:hover{color:var(--red)}
+.surprise-again{width:100%;min-height:44px;border-radius:12px;border:1px solid rgba(208,0,0,.16);background:rgba(208,0,0,.07);color:var(--red);font-size:11px;font-weight:900;cursor:pointer;margin-top:13px;display:flex;align-items:center;justify-content:center;gap:7px}
+.surprise-again:hover{background:rgba(208,0,0,.12)}
+.surprise-again svg{width:15px;height:15px}
+
+.distance-label{color:#D7CCD9}
+.trust-note{margin-top:10px;font-size:10.5px;color:var(--muted)}
+
 /* FOOTER */
 .footer{border-top:1px solid var(--line);padding:46px 0 calc(48px + env(safe-area-inset-bottom))}
 .footer-inner{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:end}
@@ -319,6 +402,12 @@ img{display:block;max-width:100%}
 /* ACCESSIBILITY */
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--red-bright);outline-offset:3px}
 
+@media (max-width:1180px){
+  .top-nav{padding:0 18px}
+  .nav-btn{padding:9px 10px;font-size:12px}
+  .nav-links [data-nav="home"]{display:none}
+}
+
 @media (max-width:1020px){
   .hero-inner{grid-template-columns:1fr .78fr;gap:36px;min-height:650px}
   .hero h1{font-size:clamp(58px,8vw,88px)}
@@ -337,7 +426,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   :root{--nav-h:62px}
   body{padding-bottom:calc(var(--bottom-nav-h) + env(safe-area-inset-bottom))}
   .top-nav{height:var(--nav-h);padding:0 16px}
-  .brand img{width:94px;height:45px}
+  .brand-lockup-main{font-size:24px}
+  .brand-lockup-city{font-size:6.5px;margin-top:4px}
   .nav-links{display:none}
   .shell{width:min(100% - 30px,1240px)}
   .hero-inner{display:block;min-height:auto;padding:52px 0 36px}
@@ -420,11 +510,21 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   .footer-links{justify-content:flex-start}
   .footer-email{font-size:23px}
 
-  .bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:100;height:calc(var(--bottom-nav-h) + env(safe-area-inset-bottom));padding:7px 10px env(safe-area-inset-bottom);background:rgba(24,19,32,.93);border-top:1px solid var(--line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:grid;grid-template-columns:repeat(4,1fr)}
-  .bottom-nav button{border:0;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:9.5px;font-weight:700;cursor:pointer}
+  .bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:100;height:calc(var(--bottom-nav-h) + env(safe-area-inset-bottom));padding:7px 8px env(safe-area-inset-bottom);background:rgba(24,19,32,.93);border-top:1px solid var(--line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:grid;grid-template-columns:repeat(5,1fr)}
+  .bottom-nav button{border:0;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:8.8px;font-weight:700;cursor:pointer;min-width:0}
+  .bottom-nav .surprise-mobile{color:#fff}
+  .bottom-nav .surprise-mobile .surprise-orb{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--red);margin-top:-15px;box-shadow:0 7px 22px rgba(208,0,0,.34);border:3px solid rgba(24,19,32,.95)}
+  .bottom-nav .surprise-mobile svg{width:16px;height:16px}
   .bottom-nav svg{width:18px;height:18px}
   .bottom-nav button.active{color:#fff}
   .bottom-nav button.active svg{color:var(--red-bright)}
+  .surprise-backdrop{align-items:flex-end;padding:0}
+  .surprise-panel{width:100%;border-radius:26px 26px 0 0;padding:24px 17px calc(20px + env(safe-area-inset-bottom));max-height:92dvh;overflow-y:auto}
+  .surprise-panel:before{content:"";display:block;width:42px;height:4px;border-radius:99px;background:#CBC2CC;margin:-10px auto 19px}
+  .surprise-title{font-size:38px}
+  .surprise-options{gap:8px;margin-top:20px}
+  .surprise-option{min-height:65px;padding:11px 12px}
+  .surprise-option-name{font-size:18px}
   .toast{bottom:calc(var(--bottom-nav-h) + 18px + env(safe-area-inset-bottom))}
 }
 
@@ -437,6 +537,37 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   .detail-btn.secondary-site{display:none}
 }
 
+
+@media (max-width:1020px){
+  .filter-bar{grid-template-columns:minmax(220px,1.2fr) .62fr .68fr .52fr auto auto}
+  .area-card,.area-card:nth-child(n){grid-column:span 6}
+  .pick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .compact-section{padding-top:44px}
+  .intent-strip{display:flex;overflow-x:auto;flex-wrap:nowrap;margin-right:-15px;padding-right:15px;scroll-snap-type:x proximity;scrollbar-width:none}
+  .intent-strip::-webkit-scrollbar{display:none}
+  .intent-chip{flex:0 0 auto;scroll-snap-align:start;padding:10px 12px;font-size:11px}
+  .area-grid{display:flex;overflow-x:auto;gap:12px;margin-right:-15px;padding-right:15px;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .area-grid::-webkit-scrollbar{display:none}
+  .area-card,.area-card:nth-child(n){flex:0 0 84vw;min-height:320px;scroll-snap-align:start}
+  .area-card h3{font-size:32px}
+  .filter-bar{grid-template-columns:1fr auto auto}
+  .filter-bar .filter-select,.filter-bar .clear-filters{display:none!important}
+  .near-btn{height:42px;min-width:42px;padding:0 11px}
+  .near-btn .near-text{display:none}
+  .active-contexts{padding-bottom:10px;margin-right:-15px;padding-right:15px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}
+  .context-pill{flex:0 0 auto}
+  .pick-grid{display:flex;overflow-x:auto;gap:12px;margin-right:-15px;padding-right:15px;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .pick-grid::-webkit-scrollbar{display:none}
+  .pick-grid .spot-card{flex:0 0 82vw;scroll-snap-align:start}
+  .detail-secondary-links{padding-bottom:4px}
+}
+@media (max-width:390px){
+  .area-card,.area-card:nth-child(n){flex-basis:87vw}
+  .pick-grid .spot-card{flex-basis:86vw}
+}
+
 @media (prefers-reduced-motion:reduce){
   *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
@@ -446,15 +577,17 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 
 <header class="top-nav">
   <button class="brand" id="brandHome" aria-label="Date Night Mumbai home">
-    <img src="logo.png" alt="Date Night Mumbai">
-    <span class="brand-mark">DNM</span>
+    <span class="brand-lockup" aria-hidden="true">
+      <span class="brand-lockup-main">Date Night</span>
+      <span class="brand-lockup-city">Mumbai</span>
+    </span>
   </button>
   <nav class="nav-links" aria-label="Primary navigation">
     <button class="nav-btn" data-nav="home">Home</button>
     <button class="nav-btn" data-nav="browse">Browse</button>
     <button class="nav-btn" data-nav="collections">Collections</button>
     <button class="nav-btn" data-nav="saved">Saved</button>
-    <button class="nav-btn nav-primary" id="navSurprise">Surprise us</button>
+    <button class="nav-btn nav-primary" id="navSurprise">Surprise me</button>
   </nav>
 </header>
 
@@ -474,7 +607,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
             </button>
             <button class="cta" id="heroSurprise">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
-              Surprise us
+              Surprise me
             </button>
           </div>
           <div class="quick-wrap" id="quickChoices">
@@ -513,6 +646,28 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
         </div>
       </section>
 
+      <section class="home-section compact-section" id="intentSection">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Start from what you need today</div>
+            <h2 class="section-title">What does this date need?</h2>
+            <p class="section-sub">Start with what the date needs, not a giant filter panel. These shortcuts come directly from the DNM directory.</p>
+          </div>
+        </div>
+        <div class="intent-strip" id="intentStrip"></div>
+      </section>
+
+      <section class="home-section" id="areaSection">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Explore Mumbai</div>
+            <h2 class="section-title">Start with the neighbourhood.</h2>
+            <p class="section-sub">Sometimes the biggest decision is how far you are willing to travel. Pick a part of the city first.</p>
+          </div>
+        </div>
+        <div class="area-grid" id="areaGrid"></div>
+      </section>
+
       <section class="home-section" id="homeCollectionsSection">
         <div class="section-head">
           <div>
@@ -527,6 +682,18 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
           <div class="skeleton"><div class="skeleton-media"></div><div class="skeleton-copy"></div></div>
           <div class="skeleton"><div class="skeleton-media"></div><div class="skeleton-copy"></div></div>
         </div>
+      </section>
+
+      <section class="home-section" id="homePicksSection">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">DNM picks</div>
+            <h2 class="section-title">A few we'd actually pick.</h2>
+            <p class="section-sub">Not an algorithmic “top 10”. Just places with a reason to be here and enough information to make a call.</p>
+          </div>
+          <button class="text-link" id="seePicks">Browse all</button>
+        </div>
+        <div class="pick-grid" id="homePicks"></div>
       </section>
 
       <section class="manifesto">
@@ -564,8 +731,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
             <input id="searchInput" class="search-input" placeholder="Search a place or neighbourhood" autocomplete="off">
           </div>
+          <select id="areaFilter" class="filter-select" aria-label="Area"><option value="">All areas</option></select>
           <select id="neighbourhoodFilter" class="filter-select" aria-label="Neighbourhood"><option value="">All neighbourhoods</option></select>
           <select id="priceFilter" class="filter-select" aria-label="Price"><option value="">Any price</option><option value="Free">Free</option><option value="Under Rs1,000">Under ₹1,000</option><option value="Rs1,000-3,000">₹1,000–3,000</option><option value="Rs3,000+">₹3,000+</option></select>
+          <button class="near-btn" id="nearMeBtn" aria-pressed="false" title="Sort by distance from you">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg><span class="near-text">Near me</span>
+          </button>
           <button class="clear-filters" id="clearFilters">Clear</button>
           <button class="mobile-filter-btn" id="mobileFilterBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
@@ -573,6 +744,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
           </button>
         </div>
 
+        <div class="active-contexts" id="activeContexts"></div>
         <div class="category-pills" id="categoryPills"></div>
       </div>
     </div>
@@ -628,7 +800,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
       <div class="footer-email">datenightmumbai@gmail.com</div>
       <div class="footer-links">
         <a href="https://www.instagram.com/datenightmumbai" target="_blank" rel="noopener">Instagram</a>
-        <a href="mailto:datenightmumbai@gmail.com">Submit a spot</a>
+        <a href="mailto:datenightmumbai@gmail.com?subject=Spot%20suggestion%20for%20Date%20Night%20Mumbai">Suggest a spot</a>
+        <a href="mailto:datenightmumbai@gmail.com?subject=Something%20is%20off%20on%20Date%20Night%20Mumbai">Report an issue</a>
       </div>
     </div>
   </div>
@@ -642,6 +815,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   <button data-nav="browse" aria-label="Browse">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
     Browse
+  </button>
+  <button class="surprise-mobile" id="bottomSurprise" aria-label="Surprise me">
+    <span class="surprise-orb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg></span>
+    Surprise
   </button>
   <button data-nav="collections" aria-label="Collections">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
@@ -667,6 +844,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
       <button class="sheet-clear" id="sheetClear">Clear all</button>
     </div>
     <div class="sheet-field">
+      <label for="sheetArea">Area</label>
+      <select class="sheet-select" id="sheetArea"><option value="">All areas</option></select>
+    </div>
+    <div class="sheet-field">
       <label for="sheetNeighbourhood">Neighbourhood</label>
       <select class="sheet-select" id="sheetNeighbourhood"><option value="">All neighbourhoods</option></select>
     </div>
@@ -675,6 +856,26 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
       <select class="sheet-select" id="sheetPrice"><option value="">Any price</option><option value="Free">Free</option><option value="Under Rs1,000">Under ₹1,000</option><option value="Rs1,000-3,000">₹1,000–3,000</option><option value="Rs3,000+">₹3,000+</option></select>
     </div>
     <button class="sheet-apply" id="sheetApply">Show results</button>
+  </div>
+</div>
+
+<!-- SURPRISE PICKER -->
+<div class="surprise-backdrop" id="surpriseBackdrop">
+  <div class="surprise-panel" role="dialog" aria-modal="true" aria-labelledby="surpriseTitle">
+    <button class="surprise-close" id="surpriseClose" aria-label="Close surprise picker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <div class="surprise-kicker">Dealer's choice</div>
+    <h2 class="surprise-title" id="surpriseTitle">Pick a lane. We’ll pick the date.</h2>
+    <p class="surprise-copy">Choose how specific you want to be. Then we give you one live DNM pick, with the option to roll once more if it is not the one.</p>
+    <div class="surprise-options" id="surpriseOptions">
+      <button class="surprise-option wide" data-surprise-cat="" aria-pressed="true"><span class="surprise-option-name">Anything in Mumbai</span><span class="surprise-option-sub">Food, drinks, culture, activities, outdoors. Full wildcard.</span></button>
+      <button class="surprise-option" data-surprise-cat="Restaurants & Cafes" aria-pressed="false"><span class="surprise-option-name">Eat</span><span class="surprise-option-sub">Restaurants, cafés, dessert.</span></button>
+      <button class="surprise-option" data-surprise-cat="Rooftops & Bars" aria-pressed="false"><span class="surprise-option-name">Drinks</span><span class="surprise-option-sub">Bars, rooftops, night energy.</span></button>
+      <button class="surprise-option" data-surprise-cat="Activities & Experiences" aria-pressed="false"><span class="surprise-option-name">Do something</span><span class="surprise-option-sub">A date with an actual activity.</span></button>
+      <button class="surprise-option" data-surprise-cat="Culture & Museums" aria-pressed="false"><span class="surprise-option-name">Culture</span><span class="surprise-option-sub">Museums, galleries, performances.</span></button>
+      <button class="surprise-option wide" data-surprise-cat="Outdoors & Free" aria-pressed="false"><span class="surprise-option-name">Outdoors & free</span><span class="surprise-option-sub">Walks, views, open air, low-spend dates.</span></button>
+    </div>
+    <button class="surprise-go" id="surpriseGo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg><span>Pick our date</span></button>
+    <div class="surprise-foot">We only pick from live DNM spots.</div>
   </div>
 </div>
 
@@ -690,19 +891,36 @@ const CATEGORIES = [
   'Outdoors & Free'
 ];
 
+const AREA_GROUPS = [
+  {slug:'south-bombay',name:'South Bombay',match:['colaba','fort','kala ghoda','churchgate','marine drive','nariman point','cuffe parade','girgaon','chowpatty','babulnath','breach candy','peddar road','malabar hill','tardeo'],copy:'Dinner, galleries and long walks. Easy to turn one plan into an entire evening.',sub:'Colaba · Kala Ghoda · Fort · Marine Drive'},
+  {slug:'bandra-khar',name:'Bandra + Khar',match:['bandra','pali hill','pali naka','carter road','chapel road','ranwar','khar'],exclude:['bkc','bandra kurla'],copy:'The deepest all-rounder. Casual meals, proper dinners, bars and somewhere else to go afterwards.',sub:'Pali Hill · Carter Road · Chapel Road · Khar'},
+  {slug:'juhu-andheri',name:'Juhu + Andheri',match:['juhu','andheri','versova','lokhandwala','oshiwara','aram nagar','santacruz','vile parle'],copy:'Activities, theatre, beach-side plans and late dinners without crossing the city.',sub:'Juhu · Versova · Andheri West · Santacruz'},
+  {slug:'lower-parel-worli',name:'Lower Parel + Worli',match:['lower parel','worli','prabhadevi','mahalaxmi','dadar'],copy:'Polished restaurants, bars and central plans that work especially well after work.',sub:'Lower Parel · Worli · Mahalaxmi · Prabhadevi'},
+  {slug:'powai-eastern',name:'Powai + Eastern Mumbai',match:['powai','vikhroli','ghatkopar','chembur','mulund'],copy:'Strong local options when going south for a date makes no sense.',sub:'Powai · Vikhroli · Ghatkopar · Chembur'},
+  {slug:'north-beyond',name:'North + Beyond',match:['malad','goregaon','kandivali','borivali','mira road','thane','vashi','nerul','belapur','kharghar','navi mumbai'],copy:'Useful picks further north and across Thane and Navi Mumbai, without pretending every date starts in Bandra.',sub:'Malad · Borivali · Thane · Navi Mumbai'}
+];
+
 const state = {
   records: [],
   collections: [],
   activeView: 'home',
   activeCategory: '',
+  area: '',
   neighbourhood: '',
+  bestFor: '',
   price: '',
   search: '',
+  nearMe: false,
+  userLocation: null,
   browseMode: 'grid',
   browseTitle: 'Find a date',
   collectionIds: null,
   saved: new Set(JSON.parse(localStorage.getItem('dnm_saved') || '[]')),
-  wildcardOffset: 0
+  wildcardOffset: 0,
+  surpriseCategory: '',
+  lastSurpriseId: '',
+  lastSurpriseCategory: '',
+  detailSource: ''
 };
 
 let map = null;
@@ -778,6 +996,36 @@ async function fetchTable(table){
 
 function liveRecords(){ return state.records.filter(r=>isLive(r.fields)); }
 
+function areaForRecord(r){
+  const hood=String(r?.fields?.['Auto - Neighbourhood']||'').toLowerCase();
+  if(!hood) return '';
+  const group=AREA_GROUPS.find(g=>g.match.some(k=>hood.includes(k)) && !(g.exclude||[]).some(k=>hood.includes(k)));
+  return group?.slug || '';
+}
+
+function recordsInArea(slug){ return liveRecords().filter(r=>areaForRecord(r)===slug); }
+
+function haversineKm(a,b){
+  if(!a||!b) return Infinity;
+  const toRad=d=>d*Math.PI/180, R=6371;
+  const dLat=toRad(b.lat-a.lat), dLon=toRad(b.lng-a.lng);
+  const x=Math.sin(dLat/2)**2+Math.cos(toRad(a.lat))*Math.cos(toRad(b.lat))*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(x));
+}
+
+function distanceForRecord(r){
+  if(!state.userLocation) return Infinity;
+  const lat=parseFloat(r.fields['Auto - Latitude']), lng=parseFloat(r.fields['Auto - Longitude']);
+  if(Number.isNaN(lat)||Number.isNaN(lng)) return Infinity;
+  return haversineKm(state.userLocation,{lat,lng});
+}
+
+function bestForMatches(r,label){
+  if(!label) return true;
+  return selectToArray(r.fields['SELECT - Best For']).some(v=>v.toLowerCase()===label.toLowerCase());
+}
+
+
 function showToast(message){
   const t = $('toast');
   t.textContent = message;
@@ -804,21 +1052,31 @@ function setView(view,{scroll=true}={}){
   if (view==='collections') renderCollections();
   if (view==='saved') renderSaved();
   if (view==='browse') renderBrowse();
+  if (view!=='browse'){
+    const url=new URL(location.href);
+    ['category','area','bestFor','price','hood','q','mode'].forEach(k=>url.searchParams.delete(k));
+    if(view==='home') url.searchParams.delete('view'); else url.searchParams.set('view',view);
+    history.replaceState(null,'',url);
+  }
   if (scroll) window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function resetBrowse(){
-  state.activeCategory=''; state.neighbourhood=''; state.price=''; state.search=''; state.collectionIds=null; state.browseTitle='Find a date';
-  $('searchInput').value=''; $('neighbourhoodFilter').value=''; $('priceFilter').value='';
-  $('sheetNeighbourhood').value=''; $('sheetPrice').value='';
+  state.activeCategory=''; state.area=''; state.neighbourhood=''; state.bestFor=''; state.price=''; state.search=''; state.collectionIds=null; state.browseTitle='Find a date'; state.nearMe=false;
+  $('searchInput').value=''; $('areaFilter').value=''; $('neighbourhoodFilter').value=''; $('priceFilter').value='';
+  $('sheetArea').value=''; $('sheetNeighbourhood').value=''; $('sheetPrice').value='';
 }
 
-function openBrowse({category='',price='',title='Find a date',collectionIds=null}={}){
+function openBrowse({category='',area='',bestFor='',price='',title='Find a date',collectionIds=null}={}){
   resetBrowse();
   state.activeCategory=category;
+  state.area=area;
+  state.bestFor=bestFor;
   state.price=price;
   state.browseTitle=title;
   state.collectionIds=collectionIds;
+  $('areaFilter').value=area;
+  $('sheetArea').value=area;
   $('priceFilter').value=price;
   $('sheetPrice').value=price;
   setView('browse');
@@ -887,6 +1145,53 @@ function renderCategoryCards(){
   $('categoryGrid').querySelectorAll('.category-card').forEach(card=>card.addEventListener('click',()=>openBrowse({category:card.dataset.category,title:card.dataset.category})));
 }
 
+function renderIntentShortcuts(){
+  const counts=new Map();
+  liveRecords().forEach(r=>selectToArray(r.fields['SELECT - Best For']).forEach(tag=>{
+    const clean=String(tag||'').trim(); if(!clean)return;
+    counts.set(clean,(counts.get(clean)||0)+1);
+  }));
+  const items=[...counts.entries()].sort((a,b)=>b[1]-a[1] || a[0].localeCompare(b[0])).slice(0,8);
+  const section=$('intentSection');
+  if(!items.length){section.style.display='none';return;}
+  section.style.display='block';
+  $('intentStrip').innerHTML=items.map(([name,count])=>`<button class="intent-chip" data-intent="${escapeHtml(name)}"><span>${escapeHtml(name)}</span><span class="intent-count">${count}</span></button>`).join('');
+  $('intentStrip').querySelectorAll('[data-intent]').forEach(btn=>btn.addEventListener('click',()=>openBrowse({bestFor:btn.dataset.intent,title:btn.dataset.intent})));
+}
+
+function renderAreas(){
+  const cards=AREA_GROUPS.map(g=>{
+    const matches=recordsInArea(g.slug);
+    if(!matches.length)return '';
+    const hero=matches.find(r=>getPhotoUrl(r.fields) && r.fields['CHECK - Editor Verified']) || matches.find(r=>getPhotoUrl(r.fields));
+    const photo=hero?getPhotoUrl(hero.fields):'';
+    return `<article class="area-card" data-area="${g.slug}">
+      ${photo?`<img src="${escapeHtml(photo)}" alt="" loading="lazy">`:''}
+      <span class="arrow">${iconArrow()}</span>
+      <div class="area-card-content"><h3>${escapeHtml(g.name)}</h3><p>${escapeHtml(g.copy)}</p><div class="area-card-meta"><span>${matches.length} spot${matches.length===1?'':'s'}</span><span>·</span><span>${escapeHtml(g.sub)}</span></div></div>
+    </article>`;
+  }).filter(Boolean);
+  const section=$('areaSection');
+  if(!cards.length){section.style.display='none';return;}
+  section.style.display='block';
+  $('areaGrid').innerHTML=cards.join('');
+  $('areaGrid').querySelectorAll('[data-area]').forEach(card=>card.addEventListener('click',()=>{
+    const g=AREA_GROUPS.find(x=>x.slug===card.dataset.area);
+    openBrowse({area:card.dataset.area,title:g?.name||'Explore Mumbai'});
+  }));
+}
+
+function renderHomePicks(){
+  const verified=liveRecords().filter(r=>r.fields['CHECK - Editor Verified'] && (r.fields["TEXT - Editor's Take"]||'').trim());
+  const fallback=liveRecords().filter(r=>(r.fields["TEXT - Editor's Take"]||'').trim());
+  const list=(verified.length?verified:fallback).slice(0,6);
+  const section=$('homePicksSection');
+  if(!list.length){section.style.display='none';return;}
+  section.style.display='block';
+  $('homePicks').innerHTML=list.map(spotCardHtml).join('');
+  bindSpotCards($('homePicks'));
+}
+
 function collectionCardHtml(c){
   const f=c.fields;
   const cover=(f['Cover Photo']&&f['Cover Photo'][0])?f['Cover Photo'][0].url:'';
@@ -928,6 +1233,9 @@ function openCollection(id){
 }
 
 function populateFilters(){
+  const areaOptions='<option value="">All areas</option>'+AREA_GROUPS.filter(g=>recordsInArea(g.slug).length).map(g=>`<option value="${g.slug}">${escapeHtml(g.name)}</option>`).join('');
+  $('areaFilter').innerHTML=areaOptions;
+  $('sheetArea').innerHTML=areaOptions;
   const hoods=[...new Set(liveRecords().map(r=>r.fields['Auto - Neighbourhood']).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
   const options='<option value="">All neighbourhoods</option>'+hoods.map(h=>`<option value="${escapeHtml(h)}">${escapeHtml(h)}</option>`).join('');
   $('neighbourhoodFilter').innerHTML=options;
@@ -939,7 +1247,9 @@ function passesFilters(r){
   if (!isLive(f)) return false;
   if (state.collectionIds && !state.collectionIds.includes(r.id)) return false;
   if (state.activeCategory && f['SELECT - Category']!==state.activeCategory) return false;
+  if (state.area && areaForRecord(r)!==state.area) return false;
   if (state.neighbourhood && f['Auto - Neighbourhood']!==state.neighbourhood) return false;
+  if (state.bestFor && !bestForMatches(r,state.bestFor)) return false;
   if (state.price && f['SELECT - Price for Two']!==state.price) return false;
   if (state.search){
     const hay=[f['Auto - Name'],f['Auto - Neighbourhood'],f['SELECT - Category'],...selectToArray(f['SELECT - Vibe']),...selectToArray(f['SELECT - Best For'])].filter(Boolean).join(' ').toLowerCase();
@@ -963,7 +1273,7 @@ function spotCardHtml(r){
     <div class="spot-info">
       <div class="spot-category">${escapeHtml(f['SELECT - Category'] || '')}</div>
       <h3 class="spot-name">${escapeHtml(f['Auto - Name'] || 'Untitled')}</h3>
-      <div class="spot-meta">${escapeHtml(f['Auto - Neighbourhood'] || '')}${f['SELECT - Price for Two']?' · '+escapeHtml(f['SELECT - Price for Two']):''}</div>
+      <div class="spot-meta">${escapeHtml(f['Auto - Neighbourhood'] || '')}${f['SELECT - Price for Two']?' · '+escapeHtml(f['SELECT - Price for Two']):''}${state.nearMe && Number.isFinite(distanceForRecord(r))?` · <span class="distance-label">${distanceForRecord(r).toFixed(1)} km</span>`:''}</div>
       ${reason?`<div class="spot-reason">${escapeHtml(reason)}</div>`:''}
       ${tags.length?`<div class="spot-tags">${tags.map(t=>`<span class="spot-tag">${escapeHtml(t)}</span>`).join('')}</div>`:''}
     </div>
@@ -980,26 +1290,44 @@ function bindSpotCards(container){
 
 function updateFilterUi(){
   $('browseTitle').textContent=state.browseTitle;
+  $('areaFilter').value=state.area;
   $('neighbourhoodFilter').value=state.neighbourhood;
   $('priceFilter').value=state.price;
+  $('sheetArea').value=state.area;
   $('sheetNeighbourhood').value=state.neighbourhood;
   $('sheetPrice').value=state.price;
   $('searchInput').value=state.search;
+  $('nearMeBtn').classList.toggle('active',state.nearMe);
+  $('nearMeBtn').setAttribute('aria-pressed',state.nearMe?'true':'false');
 
   $('categoryPills').innerHTML=[['','All'],...CATEGORIES.map(c=>[c,c])].map(([value,label])=>`<button class="cat-pill ${state.activeCategory===value?'active':''}" data-category="${escapeHtml(value)}">${escapeHtml(label)}</button>`).join('');
-  $('categoryPills').querySelectorAll('.cat-pill').forEach(btn=>btn.addEventListener('click',()=>{state.activeCategory=btn.dataset.category;state.browseTitle=state.collectionIds?state.browseTitle:(state.activeCategory || 'Find a date');renderBrowse();}));
+  $('categoryPills').querySelectorAll('.cat-pill').forEach(btn=>btn.addEventListener('click',()=>{state.activeCategory=btn.dataset.category;state.collectionIds=null;state.browseTitle=state.activeCategory || 'Find a date';renderBrowse();}));
 
-  const filterCount=(state.neighbourhood?1:0)+(state.price?1:0);
+  const contexts=[];
+  if(state.area){const g=AREA_GROUPS.find(x=>x.slug===state.area);contexts.push(['area',g?.name||state.area]);}
+  if(state.bestFor)contexts.push(['bestFor',state.bestFor]);
+  if(state.collectionIds)contexts.push(['collection',state.browseTitle]);
+  $('activeContexts').innerHTML=contexts.map(([key,label])=>`<span class="context-pill">${escapeHtml(label)}<button data-clear-context="${key}" aria-label="Remove ${escapeHtml(label)}">×</button></span>`).join('');
+  $('activeContexts').querySelectorAll('[data-clear-context]').forEach(btn=>btn.addEventListener('click',()=>{
+    const key=btn.dataset.clearContext;
+    if(key==='area')state.area='';
+    if(key==='bestFor')state.bestFor='';
+    if(key==='collection'){state.collectionIds=null;state.browseTitle='Find a date';}
+    renderBrowse();
+  }));
+
+  const filterCount=(state.area?1:0)+(state.neighbourhood?1:0)+(state.bestFor?1:0)+(state.price?1:0)+(state.nearMe?1:0);
   $('mobileFilterCount').textContent=filterCount;
   $('mobileFilterCount').classList.toggle('visible',filterCount>0);
-  const hasAny=!!(state.activeCategory||state.neighbourhood||state.price||state.search||state.collectionIds);
+  const hasAny=!!(state.activeCategory||state.area||state.neighbourhood||state.bestFor||state.price||state.search||state.collectionIds||state.nearMe);
   $('clearFilters').classList.toggle('visible',hasAny);
 }
 
 function renderBrowse(){
   if (!state.records.length) return;
   updateFilterUi();
-  const visible=state.records.filter(passesFilters).sort((a,b)=>(a.fields['Auto - Name']||'').localeCompare(b.fields['Auto - Name']||''));
+  syncBrowseUrl();
+  const visible=state.records.filter(passesFilters).sort((a,b)=>state.nearMe ? distanceForRecord(a)-distanceForRecord(b) : (a.fields['Auto - Name']||'').localeCompare(b.fields['Auto - Name']||''));
   $('resultCount').textContent=`${visible.length} spot${visible.length===1?'':'s'}${state.collectionIds?' in this collection':''}`;
   $('loadingGrid').hidden=true;
   if (state.browseMode==='grid') {
@@ -1052,10 +1380,11 @@ function renderMap(records){
   if (bounds.length) map.fitBounds(bounds,{padding:[28,28],maxZoom:13});
 }
 
-function openDetail(id){
+function openDetail(id,{source=''}={}){
   const r=state.records.find(x=>x.id===id);
   if(!r)return;
   const f=r.fields;
+  state.detailSource=source;
   const photos=getPhotos(f);
   const tags=[...selectToArray(f['SELECT - Vibe']),...selectToArray(f['SELECT - Best For'])];
   const take=f["TEXT - Editor's Take"] || '';
@@ -1063,7 +1392,7 @@ function openDetail(id){
     ['Neighbourhood',f['Auto - Neighbourhood']],
     ['Price for two',f['SELECT - Price for Two']],
     ['Best time',selectToArray(f['SELECT - Best Time']).join(', ')],
-    ['Reservation',f['CHECK - Reservation Required']?'Required':(f['CHECK - Reservation Recommended']?'Recommended':'Walk-in fine')],
+    ['Reservation',f['CHECK - Reservation Required']?'Required':(f['CHECK - Reservation Recommended']?'Recommended':'Not confirmed')],
     ['Seating',[f['CHECK - Indoor Seating']?'Indoor':'',f['CHECK - Outdoor Seating']?'Outdoor':''].filter(Boolean).join(' + ')],
     ['Alcohol',f['CHECK - Alcohol Served']?'Served':'Not confirmed'],
     ['Parking',f['CHECK - Parking Available']?'Available':'Not confirmed'],
@@ -1087,8 +1416,13 @@ function openDetail(id){
       ${facts.length?`<div class="detail-section"><div class="detail-label">Useful stuff</div><div class="fact-grid">${facts.map(([l,v])=>`<div class="fact"><div class="fact-label">${escapeHtml(l)}</div><div class="fact-value">${escapeHtml(v)}</div></div>`).join('')}</div></div>`:''}
       <div class="detail-actions">
         <a class="detail-btn primary" href="${escapeHtml(getMapsUrl(f))}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> Maps</a>
-        ${f['Auto - Website']?`<a class="detail-btn secondary-site" href="${escapeHtml(f['Auto - Website'])}" target="_blank" rel="noopener">Website</a>`:`<button class="detail-btn" data-save-id="${id}">${saved?'Saved':'Save'}</button>`}
+        <button class="detail-btn" data-save-id="${id}">${saved?'Saved':'Save'}</button>
         <button class="detail-btn share" id="shareSpot" aria-label="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.2M8.7 13.3l6.6 4.2"/></svg></button>
+      </div>
+      ${state.detailSource==='surprise'?`<button class="surprise-again" id="surpriseAgain"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11a8.1 8.1 0 1 0 2 5.3"/><path d="M20 4v7h-7"/></svg>Try another in this lane</button>`:''}
+      <div class="detail-secondary-links">
+        ${f['Auto - Website']?`<a href="${escapeHtml(f['Auto - Website'])}" target="_blank" rel="noopener">Website ↗</a>`:''}
+        <a href="mailto:datenightmumbai@gmail.com?subject=${encodeURIComponent('Something is off: '+(f['Auto - Name']||'Date Night Mumbai spot'))}">Something wrong here?</a>
       </div>
     </div>`;
   $('modalBackdrop').classList.add('open');
@@ -1096,11 +1430,13 @@ function openDetail(id){
   $('modalClose').addEventListener('click',closeDetail);
   $('detailCard').querySelectorAll('[data-save-id]').forEach(btn=>btn.addEventListener('click',()=>{toggleSaved(id);btn.textContent=state.saved.has(id)?'Saved':'Save';}));
   $('shareSpot').addEventListener('click',()=>shareSpot(r));
+  if($('surpriseAgain')) $('surpriseAgain').addEventListener('click',()=>surpriseAgain());
   const url=new URL(location.href); url.searchParams.set('spot',id); history.replaceState(null,'',url);
 }
 
 function closeDetail(){
   $('modalBackdrop').classList.remove('open');
+  state.detailSource='';
   document.body.classList.remove('modal-open');
   const url=new URL(location.href); url.searchParams.delete('spot'); history.replaceState(null,'',url.pathname+url.search+url.hash);
 }
@@ -1115,46 +1451,116 @@ async function shareSpot(r){
   }catch(err){ if(err.name!=='AbortError') showToast('Could not share this one'); }
 }
 
+function openSurprisePicker(){
+  if(!liveRecords().length){showToast('Give us a second to load Mumbai');return;}
+  state.surpriseCategory='';
+  $('surpriseOptions').querySelectorAll('[data-surprise-cat]').forEach(btn=>btn.setAttribute('aria-pressed',btn.dataset.surpriseCat===''?'true':'false'));
+  $('surpriseGo').disabled=false;
+  $('surpriseGo').querySelector('span').textContent='Pick our date';
+  $('surpriseBackdrop').classList.add('open');
+  document.body.classList.add('modal-open');
+}
+
+function closeSurprisePicker(){
+  $('surpriseBackdrop').classList.remove('open');
+  if(!$('modalBackdrop').classList.contains('open')) document.body.classList.remove('modal-open');
+}
+
+function chooseSurpriseCategory(cat){
+  state.surpriseCategory=cat||'';
+  $('surpriseOptions').querySelectorAll('[data-surprise-cat]').forEach(btn=>btn.setAttribute('aria-pressed',btn.dataset.surpriseCat===state.surpriseCategory?'true':'false'));
+}
+
+function pickSurpriseRecord(category=''){
+  let pool=liveRecords().filter(r=>!category || r.fields['SELECT - Category']===category);
+  const withPhoto=pool.filter(r=>getPhotoUrl(r.fields));
+  if(withPhoto.length) pool=withPhoto;
+  if(pool.length>1 && state.lastSurpriseId) pool=pool.filter(r=>r.id!==state.lastSurpriseId);
+  if(!pool.length) return null;
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
 function surpriseMe(){
-  const pool=liveRecords().filter(r=>getPhotoUrl(r.fields));
-  if(!pool.length){showToast('Give us a second to load Mumbai');return;}
-  const r=pool[Math.floor(Math.random()*pool.length)];
-  openDetail(r.id);
+  const category=state.surpriseCategory;
+  const r=pickSurpriseRecord(category);
+  if(!r){showToast('No live picks in that lane yet');return;}
+  const go=$('surpriseGo');
+  go.disabled=true;
+  go.querySelector('span').textContent='Picking…';
+  state.lastSurpriseId=r.id;
+  state.lastSurpriseCategory=category;
+  setTimeout(()=>{
+    closeSurprisePicker();
+    go.disabled=false;
+    go.querySelector('span').textContent='Pick our date';
+    openDetail(r.id,{source:'surprise'});
+  },520);
+}
+
+function surpriseAgain(){
+  const r=pickSurpriseRecord(state.lastSurpriseCategory);
+  if(!r){showToast('That is every live pick in this lane for now');return;}
+  state.lastSurpriseId=r.id;
+  openDetail(r.id,{source:'surprise'});
 }
 
 function clearFilters(){
-  const keepCollection=state.collectionIds;
-  const keepTitle=state.collectionIds?state.browseTitle:'Find a date';
-  state.activeCategory='';state.neighbourhood='';state.price='';state.search='';state.collectionIds=keepCollection;state.browseTitle=keepTitle;
+  state.activeCategory='';state.area='';state.neighbourhood='';state.bestFor='';state.price='';state.search='';state.collectionIds=null;state.browseTitle='Find a date';state.nearMe=false;
   renderBrowse();
+}
+
+function toggleNearMe(){
+  if(state.nearMe){state.nearMe=false;renderBrowse();return;}
+  if(!navigator.geolocation){showToast('Location is not available in this browser');return;}
+  const btn=$('nearMeBtn');
+  btn.disabled=true;
+  showToast('Getting your location…');
+  navigator.geolocation.getCurrentPosition(pos=>{
+    state.userLocation={lat:pos.coords.latitude,lng:pos.coords.longitude};
+    state.nearMe=true;
+    btn.disabled=false;
+    renderBrowse();
+    showToast('Sorted nearest first');
+  },()=>{
+    btn.disabled=false;
+    showToast('Could not access your location');
+  },{enableHighAccuracy:false,timeout:8000,maximumAge:300000});
 }
 
 function bindEvents(){
   $('brandHome').addEventListener('click',()=>setView('home'));
   document.querySelectorAll('[data-nav]').forEach(btn=>btn.addEventListener('click',()=>setView(btn.dataset.nav)));
-  $('navSurprise').addEventListener('click',surpriseMe);
-  $('heroSurprise').addEventListener('click',surpriseMe);
+  $('navSurprise').addEventListener('click',openSurprisePicker);
+  $('heroSurprise').addEventListener('click',openSurprisePicker);
+  $('bottomSurprise').addEventListener('click',openSurprisePicker);
+  $('surpriseOptions').querySelectorAll('[data-surprise-cat]').forEach(btn=>btn.addEventListener('click',()=>chooseSurpriseCategory(btn.dataset.surpriseCat)));
+  $('surpriseGo').addEventListener('click',surpriseMe);
+  $('surpriseClose').addEventListener('click',closeSurprisePicker);
+  $('surpriseBackdrop').addEventListener('click',e=>{if(e.target.id==='surpriseBackdrop')closeSurprisePicker();});
   $('heroBrowse').addEventListener('click',()=>openBrowse());
   $('seeEverything').addEventListener('click',()=>openBrowse());
   $('seeCollections').addEventListener('click',()=>setView('collections'));
+  $('seePicks').addEventListener('click',()=>openBrowse());
   $('quickChoices').querySelectorAll('[data-quick]').forEach(btn=>btn.addEventListener('click',()=>quickChoice(btn.dataset.quick)));
   $('wildcardCard').addEventListener('click',(e)=>{if(e.target.closest('#wildcardRefresh'))return;if($('wildcardCard').dataset.id)openDetail($('wildcardCard').dataset.id);});
 
   $('searchInput').addEventListener('input',e=>{state.search=e.target.value.trim();renderBrowse();});
+  $('areaFilter').addEventListener('change',e=>{state.area=e.target.value;state.neighbourhood='';renderBrowse();});
   $('neighbourhoodFilter').addEventListener('change',e=>{state.neighbourhood=e.target.value;renderBrowse();});
   $('priceFilter').addEventListener('change',e=>{state.price=e.target.value;renderBrowse();});
+  $('nearMeBtn').addEventListener('click',toggleNearMe);
   $('clearFilters').addEventListener('click',clearFilters);
 
   $('gridToggle').addEventListener('click',()=>{state.browseMode='grid';$('gridToggle').classList.add('active');$('mapToggle').classList.remove('active');renderBrowse();});
   $('mapToggle').addEventListener('click',()=>{state.browseMode='map';$('mapToggle').classList.add('active');$('gridToggle').classList.remove('active');renderBrowse();});
 
-  $('mobileFilterBtn').addEventListener('click',()=>{$('sheetBackdrop').classList.add('open');$('sheetNeighbourhood').value=state.neighbourhood;$('sheetPrice').value=state.price;});
+  $('mobileFilterBtn').addEventListener('click',()=>{$('sheetBackdrop').classList.add('open');$('sheetArea').value=state.area;$('sheetNeighbourhood').value=state.neighbourhood;$('sheetPrice').value=state.price;});
   $('sheetBackdrop').addEventListener('click',e=>{if(e.target.id==='sheetBackdrop')$('sheetBackdrop').classList.remove('open');});
-  $('sheetApply').addEventListener('click',()=>{state.neighbourhood=$('sheetNeighbourhood').value;state.price=$('sheetPrice').value;$('sheetBackdrop').classList.remove('open');renderBrowse();});
-  $('sheetClear').addEventListener('click',()=>{$('sheetNeighbourhood').value='';$('sheetPrice').value='';state.neighbourhood='';state.price='';$('sheetBackdrop').classList.remove('open');renderBrowse();});
+  $('sheetApply').addEventListener('click',()=>{state.area=$('sheetArea').value;state.neighbourhood=$('sheetNeighbourhood').value;state.price=$('sheetPrice').value;$('sheetBackdrop').classList.remove('open');renderBrowse();});
+  $('sheetClear').addEventListener('click',()=>{$('sheetArea').value='';$('sheetNeighbourhood').value='';$('sheetPrice').value='';state.area='';state.neighbourhood='';state.bestFor='';state.price='';state.nearMe=false;$('sheetBackdrop').classList.remove('open');renderBrowse();});
 
   $('modalBackdrop').addEventListener('click',e=>{if(e.target.id==='modalBackdrop')closeDetail();});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDetail();$('sheetBackdrop').classList.remove('open');}});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDetail();$('sheetBackdrop').classList.remove('open');closeSurprisePicker();}});
 }
 
 function renderError(message){
@@ -1163,6 +1569,38 @@ function renderError(message){
   $('loadingGrid').hidden=true;
   $('spotGrid').hidden=false;
   $('spotGrid').innerHTML=`<div class="empty-state"><strong>Could not load spots.</strong>Please refresh and try again.</div>`;
+}
+
+function syncBrowseUrl(){
+  if(state.activeView!=='browse')return;
+  const url=new URL(location.href);
+  url.searchParams.set('view','browse');
+  const pairs={category:state.activeCategory,area:state.area,bestFor:state.bestFor,price:state.price,hood:state.neighbourhood,q:state.search,mode:state.browseMode};
+  Object.entries(pairs).forEach(([k,v])=>v?url.searchParams.set(k,v):url.searchParams.delete(k));
+  history.replaceState(null,'',url);
+}
+
+function restoreBrowseFromUrl(){
+  const url=new URL(location.href), p=url.searchParams;
+  const requestedView=p.get('view');
+  if(requestedView==='collections' || requestedView==='saved'){
+    setView(requestedView,{scroll:false});
+    return true;
+  }
+  if(requestedView!=='browse')return false;
+  state.activeCategory=p.get('category')||'';
+  state.area=p.get('area')||'';
+  state.bestFor=p.get('bestFor')||'';
+  state.price=p.get('price')||'';
+  state.neighbourhood=p.get('hood')||'';
+  state.search=p.get('q')||'';
+  state.browseMode=p.get('mode')==='map'?'map':'grid';
+  const g=AREA_GROUPS.find(x=>x.slug===state.area);
+  state.browseTitle=state.bestFor || g?.name || state.activeCategory || 'Find a date';
+  setView('browse',{scroll:false});
+  $('gridToggle').classList.toggle('active',state.browseMode==='grid');
+  $('mapToggle').classList.toggle('active',state.browseMode==='map');
+  return true;
 }
 
 async function init(){
@@ -1177,9 +1615,13 @@ async function init(){
     populateFilters();
     renderWildcard();
     renderCategoryCards();
+    renderIntentShortcuts();
+    renderAreas();
     renderHomeCollections();
+    renderHomePicks();
     renderCollections();
     renderBrowse();
+    restoreBrowseFromUrl();
     const deepLink=new URL(location.href).searchParams.get('spot');
     if(deepLink && state.records.some(r=>r.id===deepLink)) openDetail(deepLink);
   }catch(err){
