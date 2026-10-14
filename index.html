@@ -572,6 +572,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
 </style>
+<link rel="stylesheet" href="v4.css">
 </head>
 <body>
 
@@ -585,10 +586,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   <nav class="nav-links" aria-label="Primary navigation">
     <button class="nav-btn" data-nav="home">Home</button>
     <button class="nav-btn" data-nav="browse">Browse</button>
+    <button class="nav-btn" data-nav="events">What's On</button>
+    <button class="nav-btn" data-nav="plans">Date Plans</button>
     <button class="nav-btn" data-nav="collections">Collections</button>
     <button class="nav-btn" data-nav="saved">Saved</button>
     <button class="nav-btn nav-primary" id="navSurprise">Surprise me</button>
   </nav>
+  <button class="v4-header-saved" data-nav="saved" aria-label="Saved places">♡ <span>Saved</span></button>
 </header>
 
 <main>
@@ -631,6 +635,22 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
     </div>
 
     <div class="shell">
+      <section class="home-section v4-home-events" id="v4HomeEventsSection">
+        <div class="section-head"><div><div class="eyebrow">Worth leaving the house for</div><h2 class="section-title">What's on in Mumbai.</h2><p class="section-sub">Theatre, comedy, concerts, exhibitions and the good stuff in between. Only dates you can still make.</p></div><button class="text-link" data-v4-nav="events">All events →</button></div>
+        <div class="v4-events-row" id="v4HomeEvents"><div class="v4-loading">Checking the calendar…</div></div>
+      </section>
+      <section class="home-section v4-mood-section" id="v4MoodSection">
+        <div class="section-head"><div><div class="eyebrow">Your kind of evening</div><h2 class="section-title">Pick your mood.</h2><p class="section-sub">First date or fifth anniversary. Start with how you want it to feel.</p></div></div>
+        <div class="v4-mood-grid" id="v4MoodGrid"></div>
+      </section>
+      <section class="home-section v4-plans-section" id="v4HomePlansSection">
+        <div class="section-head"><div><div class="eyebrow">We made the plan</div><h2 class="section-title">Plans, not just places.</h2><p class="section-sub">Two or three stops. One genuinely good date. No spreadsheet required.</p></div><button class="text-link" data-v4-nav="plans">See all plans →</button></div>
+        <div class="v4-plans-row" id="v4HomePlans"><div class="v4-loading">Putting the pieces together…</div></div>
+      </section>
+      <section class="home-section" id="v4HotSection">
+        <div class="section-head"><div><div class="eyebrow">On our radar</div><h2 class="section-title">Hot right now.</h2><p class="section-sub">New, noteworthy, or just too good to ignore.</p></div></div>
+        <div class="v4-hot-row" id="v4HotGrid"></div>
+      </section>
       <section class="home-section">
         <div class="section-head">
           <div>
@@ -756,7 +776,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
         <div class="skeleton"><div class="skeleton-media"></div><div class="skeleton-copy"></div></div>
       </div>
       <div class="spot-grid" id="spotGrid" hidden></div>
-      <div class="map-shell" id="mapShell"><div id="leafletMap"></div></div>
+      <div class="map-shell" id="mapShell"><div id="leafletMap"></div></div><div id="v4MapUnpinned" class="v4-map-unpinned" hidden></div>
     </div>
   </section>
 
@@ -776,6 +796,22 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
     </div>
   </section>
 
+  <!-- WHAT'S ON -->
+  <section class="view" id="eventsView">
+    <div class="shell simple-page v4-page">
+      <div class="page-head"><div class="eyebrow">Make a date of it</div><h1 class="page-title">What's on.</h1><p class="page-sub">The shows, gigs, exhibitions, comedy and experiences worth making plans for. Past events disappear automatically.</p></div>
+      <div class="v4-filter-row"><label class="v4-filter-label">What sounds good? <select id="v4EventCategory"><option value="">Everything</option></select></label><label class="v4-filter-label">Where? <select id="v4EventArea"><option value="">All Mumbai</option></select></label><label class="v4-filter-label">When? <select id="v4EventWhen"><option value="">Upcoming</option><option value="week">Next 7 days</option><option value="month">Next 30 days</option></select></label></div>
+      <div id="v4EventsCount" class="v4-count"></div><div class="v4-events-grid" id="v4EventsGrid"></div>
+    </div>
+  </section>
+  <!-- DATE PLANS -->
+  <section class="view" id="plansView">
+    <div class="shell simple-page v4-page">
+      <div class="page-head"><div class="eyebrow">Itinerary, handled</div><h1 class="page-title">Date plans.</h1><p class="page-sub">Ready-made dates with the right stops in the right order. Pick one, make the bookings, go.</p></div>
+      <div class="v4-filter-row"><label class="v4-filter-label">Mood <select id="v4PlanMood"><option value="">Any mood</option></select></label><label class="v4-filter-label">Area <select id="v4PlanArea"><option value="">All Mumbai</option></select></label></div>
+      <div class="v4-plans-grid" id="v4PlansGrid"></div>
+    </div>
+  </section>
   <!-- SAVED -->
   <section class="view" id="savedView">
     <div class="shell simple-page">
@@ -820,13 +856,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
     <span class="surprise-orb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg></span>
     Surprise
   </button>
-  <button data-nav="collections" aria-label="Collections">
+  <button data-nav="events" aria-label="What's on">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-    Collections
+    Events
   </button>
-  <button data-nav="saved" aria-label="Saved">
+  <button data-nav="plans" aria-label="Saved">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>
-    Saved
+    Plans
   </button>
 </nav>
 
@@ -874,14 +910,18 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
       <button class="surprise-option" data-surprise-cat="Culture & Museums" aria-pressed="false"><span class="surprise-option-name">Culture</span><span class="surprise-option-sub">Museums, galleries, performances.</span></button>
       <button class="surprise-option wide" data-surprise-cat="Outdoors & Free" aria-pressed="false"><span class="surprise-option-name">Outdoors & free</span><span class="surprise-option-sub">Walks, views, open air, low-spend dates.</span></button>
     </div>
+    <label class="v4-surprise-label" for="surpriseArea">And where?</label>
+    <select id="surpriseArea" class="v4-surprise-select"><option value="">Anywhere in Mumbai</option></select>
     <button class="surprise-go" id="surpriseGo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg><span>Pick our date</span></button>
     <div class="surprise-foot">We only pick from live DNM spots.</div>
   </div>
 </div>
 
+<div class="v4-plan-backdrop" id="v4PlanBackdrop" role="dialog" aria-modal="true" aria-label="Date plan details"><div class="v4-plan-dialog" id="v4PlanDialog"></div></div>
 <div class="toast" id="toast"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="v4.js"></script>
 <script>
 const CATEGORIES = [
   'Restaurants & Cafes',
@@ -897,12 +937,17 @@ const AREA_GROUPS = [
   {slug:'juhu-andheri',name:'Juhu + Andheri',match:['juhu','andheri','versova','lokhandwala','oshiwara','aram nagar','santacruz','vile parle'],copy:'Activities, theatre, beach-side plans and late dinners without crossing the city.',sub:'Juhu · Versova · Andheri West · Santacruz'},
   {slug:'lower-parel-worli',name:'Lower Parel + Worli',match:['lower parel','worli','prabhadevi','mahalaxmi','dadar'],copy:'Polished restaurants, bars and central plans that work especially well after work.',sub:'Lower Parel · Worli · Mahalaxmi · Prabhadevi'},
   {slug:'powai-eastern',name:'Powai + Eastern Mumbai',match:['powai','vikhroli','ghatkopar','chembur','mulund'],copy:'Strong local options when going south for a date makes no sense.',sub:'Powai · Vikhroli · Ghatkopar · Chembur'},
-  {slug:'north-beyond',name:'North + Beyond',match:['malad','goregaon','kandivali','borivali','mira road','thane','vashi','nerul','belapur','kharghar','navi mumbai'],copy:'Useful picks further north and across Thane and Navi Mumbai, without pretending every date starts in Bandra.',sub:'Malad · Borivali · Thane · Navi Mumbai'}
+{slug:'north-beyond',name:'North + Beyond',match:['malad','goregaon','kandivali','borivali','mira road','thane','vashi','nerul','belapur','kharghar','navi mumbai'],copy:'Useful picks further north and across Thane and Navi Mumbai, without pretending every date starts in Bandra.',sub:'Malad · Borivali · Thane · Navi Mumbai'}
 ];
 
 const state = {
   records: [],
   collections: [],
+  events: [],
+  plans: [],
+  dateMood: '',
+  surpriseArea: '',
+  lastSurpriseArea: '',
   activeView: 'home',
   activeCategory: '',
   area: '',
@@ -1050,11 +1095,13 @@ function setView(view,{scroll=true}={}){
   if (target) target.classList.add('active');
   document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===view));
   if (view==='collections') renderCollections();
+  if (view==='events') renderV4Events();
+  if (view==='plans') renderV4Plans();
   if (view==='saved') renderSaved();
   if (view==='browse') renderBrowse();
   if (view!=='browse'){
     const url=new URL(location.href);
-    ['category','area','bestFor','price','hood','q','mode'].forEach(k=>url.searchParams.delete(k));
+    ['category','area','bestFor','price','hood','q','mode','mood'].forEach(k=>url.searchParams.delete(k));
     if(view==='home') url.searchParams.delete('view'); else url.searchParams.set('view',view);
     history.replaceState(null,'',url);
   }
@@ -1062,7 +1109,7 @@ function setView(view,{scroll=true}={}){
 }
 
 function resetBrowse(){
-  state.activeCategory=''; state.area=''; state.neighbourhood=''; state.bestFor=''; state.price=''; state.search=''; state.collectionIds=null; state.browseTitle='Find a date'; state.nearMe=false;
+  state.dateMood=''; state.activeCategory=''; state.area=''; state.neighbourhood=''; state.bestFor=''; state.price=''; state.search=''; state.collectionIds=null; state.browseTitle='Find a date'; state.nearMe=false;
   $('searchInput').value=''; $('areaFilter').value=''; $('neighbourhoodFilter').value=''; $('priceFilter').value='';
   $('sheetArea').value=''; $('sheetNeighbourhood').value=''; $('sheetPrice').value='';
 }
@@ -1182,9 +1229,13 @@ function renderAreas(){
 }
 
 function renderHomePicks(){
-  const verified=liveRecords().filter(r=>r.fields['CHECK - Editor Verified'] && (r.fields["TEXT - Editor's Take"]||'').trim());
+  const verified=liveRecords().filter(r=>(r.fields['SELECT - Curation Status']==='DNM Pick'||r.fields['CHECK - Editor Verified']) && (r.fields["TEXT - Editor's Take"]||'').trim());
   const fallback=liveRecords().filter(r=>(r.fields["TEXT - Editor's Take"]||'').trim());
-  const list=(verified.length?verified:fallback).slice(0,6);
+  const priority=['Kaspers','Americano','Late Checkout','Gaijin','The Game Palacio','Paradox Museum Mumbai'];
+  const list=(verified.length?verified:fallback).sort((a,b)=>{
+    const ai=priority.indexOf(a.fields['Auto - Name']),bi=priority.indexOf(b.fields['Auto - Name']);
+    return (ai<0?999:ai)-(bi<0?999:bi);
+  }).slice(0,6);
   const section=$('homePicksSection');
   if(!list.length){section.style.display='none';return;}
   section.style.display='block';
@@ -1250,6 +1301,7 @@ function passesFilters(r){
   if (state.area && areaForRecord(r)!==state.area) return false;
   if (state.neighbourhood && f['Auto - Neighbourhood']!==state.neighbourhood) return false;
   if (state.bestFor && !bestForMatches(r,state.bestFor)) return false;
+  if (state.dateMood && !selectToArray(f['SELECT - Date Mood']).includes(state.dateMood)) return false;
   if (state.price && f['SELECT - Price for Two']!==state.price) return false;
   if (state.search){
     const hay=[f['Auto - Name'],f['Auto - Neighbourhood'],f['SELECT - Category'],...selectToArray(f['SELECT - Vibe']),...selectToArray(f['SELECT - Best For'])].filter(Boolean).join(' ').toLowerCase();
@@ -1266,8 +1318,8 @@ function spotCardHtml(r){
   const saved=state.saved.has(r.id);
   return `<article class="spot-card" data-spot-id="${r.id}">
     <div class="spot-media">
-      ${photo?`<img src="${escapeHtml(photo)}" alt="${escapeHtml(f['Auto - Name'] || '')}" loading="lazy">`:''}
-      ${f['CHECK - Editor Verified']?`<div class="spot-badge">DNM pick</div>`:''}
+      ${photo?`<img src="${escapeHtml(photo)}" alt="${escapeHtml(f['Auto - Name'] || '')}" loading="lazy">`:`<div class="v4-spot-fallback"><span>DATE NIGHT / MUMBAI</span><strong>${escapeHtml(f['Auto - Name']||'Good plans')}</strong><small>${escapeHtml(f['Auto - Neighbourhood']||'Mumbai')}</small></div>`}
+      ${(f['SELECT - Curation Status']==='DNM Pick'||f['CHECK - Editor Verified'])?`<div class="spot-badge">DNM pick</div>`:''}
       <button class="save-btn ${saved?'saved':''}" data-save-id="${r.id}" aria-label="${saved?'Remove from saved':'Save this spot'}">${iconHeart(saved?'#fff':'none')}</button>
     </div>
     <div class="spot-info">
@@ -1306,20 +1358,22 @@ function updateFilterUi(){
   const contexts=[];
   if(state.area){const g=AREA_GROUPS.find(x=>x.slug===state.area);contexts.push(['area',g?.name||state.area]);}
   if(state.bestFor)contexts.push(['bestFor',state.bestFor]);
+  if(state.dateMood)contexts.push(['dateMood',state.dateMood]);
   if(state.collectionIds)contexts.push(['collection',state.browseTitle]);
   $('activeContexts').innerHTML=contexts.map(([key,label])=>`<span class="context-pill">${escapeHtml(label)}<button data-clear-context="${key}" aria-label="Remove ${escapeHtml(label)}">×</button></span>`).join('');
   $('activeContexts').querySelectorAll('[data-clear-context]').forEach(btn=>btn.addEventListener('click',()=>{
     const key=btn.dataset.clearContext;
     if(key==='area')state.area='';
     if(key==='bestFor')state.bestFor='';
+    if(key==='dateMood')state.dateMood='';
     if(key==='collection'){state.collectionIds=null;state.browseTitle='Find a date';}
     renderBrowse();
   }));
 
-  const filterCount=(state.area?1:0)+(state.neighbourhood?1:0)+(state.bestFor?1:0)+(state.price?1:0)+(state.nearMe?1:0);
+  const filterCount=(state.dateMood?1:0)+(state.area?1:0)+(state.neighbourhood?1:0)+(state.bestFor?1:0)+(state.price?1:0)+(state.nearMe?1:0);
   $('mobileFilterCount').textContent=filterCount;
   $('mobileFilterCount').classList.toggle('visible',filterCount>0);
-  const hasAny=!!(state.activeCategory||state.area||state.neighbourhood||state.bestFor||state.price||state.search||state.collectionIds||state.nearMe);
+  const hasAny=!!(state.dateMood||state.activeCategory||state.area||state.neighbourhood||state.bestFor||state.price||state.search||state.collectionIds||state.nearMe);
   $('clearFilters').classList.toggle('visible',hasAny);
 }
 
@@ -1332,12 +1386,17 @@ function renderBrowse(){
   $('loadingGrid').hidden=true;
   if (state.browseMode==='grid') {
     $('mapShell').classList.remove('active');
+    $('v4MapUnpinned').hidden=true;
     $('spotGrid').hidden=false;
     $('spotGrid').innerHTML=visible.length?visible.map(spotCardHtml).join(''):`<div class="empty-state"><strong>No matches.</strong>Try clearing a filter or searching a nearby neighbourhood.</div>`;
     bindSpotCards($('spotGrid'));
   } else {
     $('spotGrid').hidden=true;
     $('mapShell').classList.add('active');
+    const unpinned=visible.filter(r=>!Number.isFinite(Number(r.fields['Auto - Latitude']))||!Number.isFinite(Number(r.fields['Auto - Longitude'])));
+    $('v4MapUnpinned').hidden=!unpinned.length;
+    $('v4MapUnpinned').innerHTML=unpinned.length?`<strong>${unpinned.length} more curated spots without precise pins yet</strong><p>Still worth seeing:</p><div>${unpinned.map(r=>`<button data-v4-unpinned="${r.id}">${escapeHtml(r.fields['Auto - Name'])} ↗</button>`).join('')}</div>`:'';
+    $('v4MapUnpinned').querySelectorAll('[data-v4-unpinned]').forEach(b=>b.addEventListener('click',()=>openDetail(b.dataset.v4Unpinned)));
     setTimeout(()=>renderMap(visible),40);
   }
 }
@@ -1402,7 +1461,7 @@ function openDetail(id,{source=''}={}){
   $('detailCard').innerHTML=`
     <button class="modal-close" id="modalClose" aria-label="Close">${iconClose()}</button>
     <div class="detail-media">
-      <div class="detail-media-track">${photos.length?photos.map(p=>`<div class="detail-media-slide"><img src="${escapeHtml(p)}" alt="${escapeHtml(f['Auto - Name']||'')}"></div>`).join(''):`<div class="detail-media-slide"></div>`}</div>
+      <div class="detail-media-track">${photos.length?photos.map(p=>`<div class="detail-media-slide"><img src="${escapeHtml(p)}" alt="${escapeHtml(f['Auto - Name']||'')}"></div>`).join(''):`<div class="detail-media-slide"><div class="v4-detail-fallback">${escapeHtml(f['Auto - Name']||'Date Night Mumbai')}</div></div>`}</div>
       <div class="detail-media-shade"></div>
       ${photos.length>1?`<div class="detail-dots">${photos.map(()=>'<span></span>').join('')}</div>`:''}
     </div>
@@ -1454,6 +1513,8 @@ async function shareSpot(r){
 function openSurprisePicker(){
   if(!liveRecords().length){showToast('Give us a second to load Mumbai');return;}
   state.surpriseCategory='';
+  state.surpriseArea='';
+  $('surpriseArea').value='';
   $('surpriseOptions').querySelectorAll('[data-surprise-cat]').forEach(btn=>btn.setAttribute('aria-pressed',btn.dataset.surpriseCat===''?'true':'false'));
   $('surpriseGo').disabled=false;
   $('surpriseGo').querySelector('span').textContent='Pick our date';
@@ -1472,7 +1533,7 @@ function chooseSurpriseCategory(cat){
 }
 
 function pickSurpriseRecord(category=''){
-  let pool=liveRecords().filter(r=>!category || r.fields['SELECT - Category']===category);
+  let pool=liveRecords().filter(r=>(!category || r.fields['SELECT - Category']===category) && (!state.surpriseArea || areaForRecord(r)===state.surpriseArea));
   const withPhoto=pool.filter(r=>getPhotoUrl(r.fields));
   if(withPhoto.length) pool=withPhoto;
   if(pool.length>1 && state.lastSurpriseId) pool=pool.filter(r=>r.id!==state.lastSurpriseId);
@@ -1489,6 +1550,7 @@ function surpriseMe(){
   go.querySelector('span').textContent='Picking…';
   state.lastSurpriseId=r.id;
   state.lastSurpriseCategory=category;
+  state.lastSurpriseArea=state.surpriseArea;
   setTimeout(()=>{
     closeSurprisePicker();
     go.disabled=false;
@@ -1498,6 +1560,7 @@ function surpriseMe(){
 }
 
 function surpriseAgain(){
+  state.surpriseArea=state.lastSurpriseArea;
   const r=pickSurpriseRecord(state.lastSurpriseCategory);
   if(!r){showToast('That is every live pick in this lane for now');return;}
   state.lastSurpriseId=r.id;
@@ -1505,7 +1568,7 @@ function surpriseAgain(){
 }
 
 function clearFilters(){
-  state.activeCategory='';state.area='';state.neighbourhood='';state.bestFor='';state.price='';state.search='';state.collectionIds=null;state.browseTitle='Find a date';state.nearMe=false;
+  state.dateMood='';state.activeCategory='';state.area='';state.neighbourhood='';state.bestFor='';state.price='';state.search='';state.collectionIds=null;state.browseTitle='Find a date';state.nearMe=false;
   renderBrowse();
 }
 
@@ -1575,7 +1638,7 @@ function syncBrowseUrl(){
   if(state.activeView!=='browse')return;
   const url=new URL(location.href);
   url.searchParams.set('view','browse');
-  const pairs={category:state.activeCategory,area:state.area,bestFor:state.bestFor,price:state.price,hood:state.neighbourhood,q:state.search,mode:state.browseMode};
+  const pairs={mood:state.dateMood,category:state.activeCategory,area:state.area,bestFor:state.bestFor,price:state.price,hood:state.neighbourhood,q:state.search,mode:state.browseMode};
   Object.entries(pairs).forEach(([k,v])=>v?url.searchParams.set(k,v):url.searchParams.delete(k));
   history.replaceState(null,'',url);
 }
@@ -1583,11 +1646,12 @@ function syncBrowseUrl(){
 function restoreBrowseFromUrl(){
   const url=new URL(location.href), p=url.searchParams;
   const requestedView=p.get('view');
-  if(requestedView==='collections' || requestedView==='saved'){
+  if(['collections','saved','events','plans'].includes(requestedView)){
     setView(requestedView,{scroll:false});
     return true;
   }
   if(requestedView!=='browse')return false;
+  state.dateMood=p.get('mood')||'';
   state.activeCategory=p.get('category')||'';
   state.area=p.get('area')||'';
   state.bestFor=p.get('bestFor')||'';
@@ -1606,12 +1670,16 @@ function restoreBrowseFromUrl(){
 async function init(){
   bindEvents();
   try{
-    const [records,collections]=await Promise.all([
+    const [records,collections,events,plans]=await Promise.all([
       fetchTable('locations'),
-      fetchTable('collections').catch(()=>[])
+      fetchTable('collections').catch(()=>[]),
+      fetchTable('events').catch(()=>[]),
+      fetchTable('plans').catch(()=>[])
     ]);
     state.records=records;
     state.collections=collections;
+    state.events=events;
+    state.plans=plans;
     populateFilters();
     renderWildcard();
     renderCategoryCards();
@@ -1620,6 +1688,7 @@ async function init(){
     renderHomeCollections();
     renderHomePicks();
     renderCollections();
+    initV4();
     renderBrowse();
     restoreBrowseFromUrl();
     const deepLink=new URL(location.href).searchParams.get('spot');

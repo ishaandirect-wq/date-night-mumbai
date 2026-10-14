@@ -1,0 +1,91 @@
+/* Date Night Mumbai V4 — editorial layers, designed to inherit the V3 visual system */
+.v4-home-events,.v4-mood-section,.v4-plans-section{position:relative}
+.v4-loading,.v4-empty{grid-column:1/-1;border:1px dashed var(--line-strong);border-radius:20px;padding:35px;color:var(--muted);font-size:13px;line-height:1.6}
+.v4-events-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.v4-events-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:24px}
+.v4-event-card{display:flex;flex-direction:column;min-width:0;overflow:hidden;border-radius:21px;border:1px solid var(--line);background:linear-gradient(140deg,#2b2238,#201a2b);transition:transform .2s ease,border-color .2s ease}
+.v4-event-card:hover,.v4-plan-card:hover{transform:translateY(-3px);border-color:var(--line-strong)}
+.v4-event-image{height:148px;position:relative;background:radial-gradient(circle at 80% 15%,rgba(240,24,24,.36),transparent 47%),linear-gradient(145deg,#513047,#241c30 65%);overflow:hidden}
+.v4-event-image img{width:100%;height:100%;object-fit:cover}
+.v4-event-image:after{content:'';position:absolute;inset:35% 0 0;background:linear-gradient(transparent,rgba(20,15,28,.56))}
+.v4-event-date{position:absolute;z-index:2;left:13px;bottom:12px;font-size:12px;font-weight:800;letter-spacing:.04em;color:#fff}
+.v4-event-content{padding:17px;display:flex;flex-direction:column;flex:1}
+.v4-event-category{color:var(--red-soft);font-size:10px;letter-spacing:.1em;font-weight:800;text-transform:uppercase}
+.v4-event-title{font-family:'Bodoni Moda',serif;font-size:clamp(23px,2.2vw,30px);font-weight:500;line-height:1.08;letter-spacing:-.03em;margin:8px 0}
+.v4-event-meta{font-size:11.5px;color:var(--muted);line-height:1.5}
+.v4-event-take{font-size:12px;line-height:1.56;color:var(--paper-2);margin:13px 0 16px;flex:1}
+.v4-event-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.v4-event-actions a{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;border:1px solid var(--line-strong);padding:10px 12px;font-size:11px;font-weight:750;transition:.2s ease}
+.v4-event-actions a:hover{background:rgba(255,255,255,.08)}
+.v4-event-actions a.v4-ticket{background:var(--red);border-color:var(--red);color:white}
+.v4-event-actions a.v4-ticket:hover{background:var(--red-bright)}
+.v4-mood-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.v4-mood-card{position:relative;overflow:hidden;text-align:left;min-height:130px;border-radius:20px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(208,0,0,.17),rgba(255,255,255,.03) 48%,rgba(255,255,255,.015));padding:22px;cursor:pointer;transition:.2s ease}
+.v4-mood-card:nth-child(2n){background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(208,0,0,.07))}
+.v4-mood-card:hover{border-color:rgba(240,24,24,.5);transform:translateY(-2px)}
+.v4-mood-card strong{display:block;font-family:'Bodoni Moda',serif;font-weight:500;font-size:30px;letter-spacing:-.035em}
+.v4-mood-card span{display:block;font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.4}
+.v4-mood-card:after{content:'↗';position:absolute;right:18px;top:18px;font-size:17px;color:var(--red-soft)}
+.v4-plans-row,.v4-hot-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.v4-plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;margin-top:22px}
+.v4-plan-card{display:flex;flex-direction:column;min-height:278px;border:1px solid var(--line);background:linear-gradient(145deg,#2b2338,#201a2a);border-radius:21px;padding:23px;cursor:pointer;transition:.2s ease;text-align:left}
+.v4-plan-eyebrow{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--red-soft)}
+.v4-plan-card h3{font-family:'Bodoni Moda',serif;font-weight:500;font-size:32px;line-height:1.03;letter-spacing:-.035em;margin:12px 0}
+.v4-plan-card p{font-size:12.5px;color:var(--paper-2);line-height:1.55}
+.v4-plan-stops{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:17px 0;color:var(--muted);font-size:11px;line-height:1.5}
+.v4-plan-stops b{color:var(--paper-2);font-weight:600}
+.v4-plan-bottom{display:flex;justify-content:space-between;gap:12px;align-items:center;border-top:1px solid var(--line);padding-top:14px;margin-top:auto;color:var(--muted);font-size:11px}
+.v4-plan-bottom span:last-child{color:#fff;font-weight:700}
+.v4-hot-row .spot-card{height:100%}
+.v4-page{padding-bottom:95px}
+.v4-filter-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:25px}
+.v4-filter-label{display:flex;align-items:center;gap:9px;padding:7px 10px 7px 14px;border:1px solid var(--line);border-radius:13px;font-size:11px;color:var(--muted)}
+.v4-filter-label select{min-width:135px;max-width:200px;background:var(--panel);color:var(--paper);border:1px solid var(--line);padding:9px 11px;border-radius:9px;font-size:12px;outline:none}
+.v4-count{font-size:12px;color:var(--muted);margin-top:22px}
+.v4-header-saved{display:none}
+.v4-surprise-label{display:block;font-size:12px;color:var(--paper-2);font-weight:700;margin:19px 0 8px}
+.v4-surprise-select{display:block;width:100%;padding:13px 14px;border-radius:12px;background:var(--panel);border:1px solid var(--line-strong);color:var(--paper);outline:none;margin-bottom:15px}
+.v4-plan-backdrop{display:none;position:fixed;inset:0;z-index:160;background:rgba(10,7,14,.84);backdrop-filter:blur(9px);padding:18px;overflow-y:auto;align-items:center;justify-content:center}
+.v4-plan-backdrop.open{display:flex}
+.v4-plan-dialog{position:relative;width:min(680px,100%);max-height:min(90vh,900px);overflow-y:auto;background:var(--panel);border:1px solid var(--line-strong);border-radius:24px;padding:30px;box-shadow:var(--shadow)}
+.v4-plan-dialog h2{font-family:'Bodoni Moda',serif;font-weight:500;font-size:clamp(36px,5vw,56px);line-height:1;letter-spacing:-.04em;margin:12px 0}
+.v4-plan-dialog p{font-size:13px;color:var(--paper-2);line-height:1.6}
+.v4-plan-close{position:absolute;right:16px;top:16px;width:37px;height:37px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid var(--line);cursor:pointer;font-size:20px}
+.v4-plan-stop{display:flex;gap:16px;padding:19px 0;border-bottom:1px solid var(--line)}
+.v4-stop-index{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:50%;background:var(--red);font-size:13px;font-weight:800}
+.v4-plan-stop h3{font-family:'Bodoni Moda',serif;font-size:25px;font-weight:500;margin:0 0 7px}
+.v4-plan-stop p{margin-bottom:10px}
+.v4-stop-link{font-size:12px;font-weight:700;color:var(--red-soft);cursor:pointer;background:none;border:0;padding:0}
+.v4-plan-footer{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;margin-top:22px;font-size:12px;color:var(--muted)}
+.v4-plan-share{background:var(--red);color:#fff;border:0;padding:12px 16px;border-radius:999px;font-weight:750;cursor:pointer}
+@media(max-width:1020px){.v4-events-row{grid-template-columns:repeat(2,minmax(0,1fr))}.v4-events-grid,.v4-plans-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){
+ .v4-header-saved{display:flex;align-items:center;gap:4px;margin-left:auto;border:1px solid var(--line);border-radius:999px;padding:8px 11px;background:rgba(255,255,255,.04);font-size:14px;color:var(--paper)}
+ .v4-header-saved span{font-size:11px;font-weight:700}
+ .v4-events-row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding:0 2px 12px;scrollbar-width:none}
+ .v4-events-row .v4-event-card{flex:0 0 79vw;max-width:335px;scroll-snap-align:start}
+ .v4-events-grid,.v4-plans-grid,.v4-plans-row,.v4-hot-row{grid-template-columns:1fr}
+ .v4-mood-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .v4-mood-card{padding:17px;min-height:122px}
+ .v4-mood-card strong{font-size:25px}
+ .v4-event-image{height:170px}
+ .v4-filter-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+ .v4-filter-label{display:block;padding:10px;font-size:10px}
+ .v4-filter-label select{display:block;margin-top:6px;width:100%;min-width:0;max-width:none}
+ .v4-plan-dialog{padding:24px 19px;margin:auto 0}
+ .v4-plan-card{min-height:220px}
+}
+@media(max-width:390px){.v4-mood-grid{grid-template-columns:1fr}.v4-mood-card{min-height:98px}}
+
+/* No-photo editorial fallback: deliberate typography rather than a broken blank rectangle. */
+.v4-spot-fallback{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:22px 20px 25px;overflow:hidden;background:radial-gradient(circle at 85% 20%,rgba(240,24,24,.34),transparent 40%),linear-gradient(145deg,#38273e,#1c1728 70%)}
+.v4-spot-fallback:before{content:'✳';position:absolute;right:-5%;top:-20%;font-size:190px;line-height:1;color:rgba(255,255,255,.06);transform:rotate(18deg)}
+.v4-spot-fallback span{font-size:9px;letter-spacing:.16em;font-weight:800;color:var(--red-soft);z-index:1}
+.v4-spot-fallback strong{font-family:'Bodoni Moda',serif;font-size:clamp(28px,3vw,45px);line-height:.95;font-weight:500;letter-spacing:-.04em;margin-top:10px;max-width:90%;z-index:1;color:var(--paper)}
+.v4-spot-fallback small{font-size:11px;color:var(--paper-2);margin-top:8px;z-index:1}
+.v4-detail-fallback{width:100%;height:100%;display:grid;place-items:center;text-align:center;padding:25px;background:radial-gradient(circle at 85% 20%,rgba(240,24,24,.34),transparent 40%),linear-gradient(145deg,#38273e,#1c1728 70%);font-family:'Bodoni Moda',serif;font-size:clamp(36px,5vw,62px);letter-spacing:-.04em}
+
+.v4-map-unpinned{margin-top:16px;border:1px solid var(--line);border-radius:17px;padding:17px 20px;background:var(--panel)}
+.v4-map-unpinned strong{font-size:13px}.v4-map-unpinned p{color:var(--muted);font-size:11px;margin:5px 0 12px}
+.v4-map-unpinned div{display:flex;flex-wrap:wrap;gap:8px}
+.v4-map-unpinned button{border:1px solid var(--line-strong);border-radius:999px;background:rgba(255,255,255,.04);padding:9px 12px;font-size:11px;cursor:pointer}
